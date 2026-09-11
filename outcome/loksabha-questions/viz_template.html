@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Parliamentary Voices — 17th Lok Sabha</title>
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:#080810;font-size:14px;overflow:hidden}
+body{font-family:'SF Mono','Fira Mono','Courier New',monospace;color:#d8d0c4;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── HEADER ── */
+header{padding:0.9rem 1.8rem 0.7rem;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;display:flex;align-items:baseline;gap:1.5rem;flex-wrap:wrap}
+h1{font-family:Georgia,serif;font-size:1.35rem;font-weight:400;color:#e8e0d0;letter-spacing:-0.01em}
+h1 em{font-style:italic;color:#f07840}
+.hdr-sub{font-size:0.68rem;color:#606070;letter-spacing:0.06em}
+.hdr-count{margin-left:auto;font-size:0.65rem;color:#505060;letter-spacing:0.08em;text-transform:uppercase}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;flex-wrap:nowrap;gap:0;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;overflow-x:auto;background:#0c0c18}
+.filter-bar::-webkit-scrollbar{height:3px}
+.filter-bar::-webkit-scrollbar-thumb{background:#333}
+
+.filter-section{display:flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-right:1px solid rgba(255,255,255,0.06);flex-shrink:0}
+.filter-section:last-child{border-right:none;margin-left:auto}
+.fl{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:#404050;white-space:nowrap;flex-shrink:0}
+.pills{display:flex;gap:0.3rem;flex-wrap:nowrap}
+.pill{font-family:inherit;font-size:0.6rem;letter-spacing:0.04em;padding:0.22rem 0.55rem;border-radius:100px;background:rgba(255,255,255,0.05);color:#707080;border:1px solid rgba(255,255,255,0.08);cursor:pointer;transition:all 0.15s;white-space:nowrap;text-transform:uppercase;user-select:none}
+.pill:hover{background:rgba(255,255,255,0.1);color:#c0c0cc;border-color:rgba(255,255,255,0.2)}
+.pill.on{background:#f07840;color:#0a0a10;border-color:#f07840;font-weight:700}
+.pill.party-on{color:#fff;font-weight:700}
+
+/* Search */
+.search-wrap{position:relative;flex-shrink:0}
+#srch{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#d0d0cc;font-family:inherit;font-size:0.65rem;padding:0.24rem 0.65rem 0.24rem 1.6rem;border-radius:100px;outline:none;width:160px;transition:border-color 0.2s}
+#srch::placeholder{color:#404050}
+#srch:focus{border-color:rgba(255,255,255,0.25)}
+.si{position:absolute;left:0.55rem;top:50%;transform:translateY(-50%);color:#505060;font-size:0.68rem;pointer-events:none}
+
+/* ── AXIS SELECTORS ── */
+.axis-pill{font-size:0.58rem;padding:0.2rem 0.5rem;border-radius:100px;border:1px solid rgba(255,255,255,0.12);background:transparent;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-transform:none;letter-spacing:0}
+.axis-pill.x-on{border-color:#f07840;color:#f07840;background:rgba(240,120,64,0.12)}
+.axis-pill.y-on{border-color:#4ab0f0;color:#4ab0f0;background:rgba(74,176,240,0.12)}
+
+/* ── MAIN CANVAS AREA ── */
+.main-wrap{flex:1;display:grid;grid-template-columns:1fr 320px;min-height:0}
+
+/* ── DOT FIELD ── */
+#field{position:relative;overflow:hidden;background:#080810;min-height:0}
+#c{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+
+/* Axis label strips */
+.ax-x{position:absolute;bottom:0;left:0;right:0;height:38px;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.ax-x-inner{display:flex;align-items:center;gap:0.5rem;background:rgba(8,8,16,0.85);border:1px solid rgba(240,120,64,0.3);border-radius:100px;padding:0.3rem 1rem}
+.ax-label-x{font-size:0.68rem;color:#f07840;letter-spacing:0.06em;font-weight:700}
+.ax-arrow{font-size:0.9rem;opacity:0.7}
+
+.ax-y{position:absolute;top:0;bottom:38px;left:0;width:38px;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.ax-y-inner{display:flex;align-items:center;gap:0.4rem;background:rgba(8,8,16,0.85);border:1px solid rgba(74,176,240,0.3);border-radius:100px;padding:0.3rem 0.9rem;transform:rotate(-90deg);white-space:nowrap}
+.ax-label-y{font-size:0.68rem;color:#4ab0f0;letter-spacing:0.06em;font-weight:700}
+
+.field-hint{position:absolute;top:0.6rem;right:1rem;font-size:0.58rem;color:#303040;letter-spacing:0.06em;pointer-events:none}
+
+/* ── SIDE PANEL ── */
+#side{background:#0c0c1a;border-left:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;overflow:hidden}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,0.06)}
+.stat{padding:0.7rem 0.9rem;border-right:1px solid rgba(255,255,255,0.05)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:Georgia,serif;font-size:1.3rem;color:#e0d8c8;line-height:1}
+.stat-l{font-size:0.55rem;color:#404050;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.15rem}
+
+/* MP focus card */
+#mp-focus{padding:1rem 1.1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0}
+#mp-focus.empty{display:none}
+
+.mp-photo-wrap{display:flex;align-items:flex-start;gap:0.9rem;margin-bottom:0.8rem}
+.mp-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.1);background:#1a1a2a;flex-shrink:0;transition:border-color 0.2s}
+.mp-photo.loaded{border-color:rgba(255,255,255,0.2)}
+.mp-photo-init{width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:#1a1a2a;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:1.4rem;color:#606070;flex-shrink:0;font-weight:400}
+.mp-info{flex:1;min-width:0}
+.mp-name{font-family:Georgia,serif;font-size:1rem;color:#e0d8c8;margin-bottom:0.15rem;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-sub{font-size:0.65rem;color:#707080;margin-bottom:0.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-party-badge{display:inline-flex;align-items:center;gap:0.3rem;margin-top:0.3rem;padding:0.15rem 0.5rem;border-radius:100px;font-size:0.6rem;font-weight:700;letter-spacing:0.05em}
+.mp-total{font-size:0.63rem;color:#505060;margin-top:0.5rem}
+
+/* Sector mini bars */
+.mp-sectors{display:flex;flex-direction:column;gap:0.4rem}
+.mp-sector-row{display:flex;align-items:center;gap:0.5rem}
+.mp-sec-name{font-size:0.63rem;color:#707080;flex:0 0 90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-sec-track{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;position:relative;overflow:visible}
+.mp-sec-bar{height:100%;border-radius:2px}
+.mp-sec-avg{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:#555;border-radius:1px}
+.mp-sec-val{font-size:0.62rem;color:#e0d8c8;flex:0 0 32px;text-align:right}
+
+/* Breakdown panel */
+.breakdown{padding:0.8rem 1.1rem;flex:1;overflow-y:auto;min-height:0}
+.breakdown::-webkit-scrollbar{width:3px}
+.breakdown::-webkit-scrollbar-thumb{background:#2a2a3a;border-radius:1px}
+.bd-title{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:#404050;margin-bottom:0.7rem}
+.bd-row{margin-bottom:0.55rem}
+.bd-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.2rem}
+.bd-name{font-size:0.67rem;color:#808090}
+.bd-val{font-size:0.65rem;color:#c0c0cc;font-weight:700}
+.bd-track{height:3px;background:rgba(255,255,255,0.05);border-radius:1px;position:relative}
+.bd-fill{height:100%;border-radius:1px;transition:width 0.4s ease}
+.bd-avg-tick{position:absolute;top:-2px;bottom:-2px;width:1.5px;background:#404050;border-radius:1px}
+
+/* Legend */
+#legend{padding:0.7rem 1.1rem;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0}
+.leg-title{font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:#404050;margin-bottom:0.45rem}
+.leg-items{display:flex;flex-wrap:wrap;gap:0.3rem 0.6rem}
+.leg-item{display:flex;align-items:center;gap:0.3rem;font-size:0.6rem;color:#606070;cursor:pointer;transition:color 0.15s}
+.leg-item:hover{color:#c0c0cc}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leg-n{color:#303040;font-size:0.58rem}
+
+/* Lock hint */
+.lock-hint{font-size:0.58rem;color:#404050;margin-top:0.5rem;letter-spacing:0.04em}
+
+/* ── TOOLTIP ── */
+#tt{position:fixed;z-index:999;background:#14142a;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:0;pointer-events:none;font-size:0.72rem;color:#d0d0c8;max-width:240px;box-shadow:0 12px 40px rgba(0,0,0,0.7);transition:opacity 0.1s;opacity:0;overflow:hidden}
+#tt.show{opacity:1}
+.tt-img{width:100%;height:90px;object-fit:cover;object-position:center top;display:block;background:#1a1a2a}
+.tt-img-init{width:100%;height:90px;display:flex;align-items:center;justify-content:center;background:#1a1a2a;font-family:Georgia,serif;font-size:2rem;color:#404050}
+.tt-body{padding:0.65rem 0.8rem}
+.tt-name{font-family:Georgia,serif;font-size:0.95rem;color:#e0d8c8;margin-bottom:0.15rem;line-height:1.2}
+.tt-sub{font-size:0.62rem;color:#808090;margin-bottom:0.5rem}
+.tt-badge{display:inline-flex;align-items:center;gap:0.25rem;padding:0.1rem 0.4rem;border-radius:100px;font-size:0.58rem;font-weight:700;letter-spacing:0.04em;margin-bottom:0.5rem}
+.tt-row{display:flex;justify-content:space-between;gap:0.8rem;margin-bottom:0.18rem}
+.tt-sec{font-size:0.62rem;color:#606070}
+.tt-val{font-size:0.62rem;color:#c0c0cc;font-weight:700}
+.tt-total{font-size:0.6rem;color:#404050;margin-top:0.35rem;padding-top:0.35rem;border-top:1px solid rgba(255,255,255,0.06)}
+
+/* ── AXIS SELECT DROPDOWN ── */
+#axis-selectors{position:absolute;top:0.6rem;left:44px;display:flex;gap:0.5rem;pointer-events:all;z-index:10}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Parliamentary <em>Voices</em></h1>
+  <span class="hdr-sub">17th Lok Sabha · Bubble = MP · Size = Questions asked · Position = Sector focus</span>
+  <span class="hdr-count" id="hdr-count">499 MPs</span>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-section">
+    <span class="fl">State</span>
+    <div class="pills" id="state-pills"></div>
+  </div>
+  <div class="filter-section">
+    <span class="fl">Party</span>
+    <div class="pills" id="party-pills"></div>
+  </div>
+  <div class="filter-section">
+    <span class="fl">Gender</span>
+    <div class="pills" id="gender-pills"></div>
+  </div>
+  <div class="filter-section">
+    <div class="search-wrap">
+      <span class="si">⌕</span>
+      <input id="srch" type="text" placeholder="Search MP, state…" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <!-- DOT FIELD -->
+  <div id="field">
+    <canvas id="c"></canvas>
+
+    <!-- Axis selectors overlay -->
+    <div id="axis-selectors">
+      <div style="display:flex;flex-direction:column;gap:0.3rem">
+        <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap" id="x-axis-pills"></div>
+        <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap" id="y-axis-pills"></div>
+      </div>
+    </div>
+
+    <!-- X axis label -->
+    <div class="ax-x">
+      <div class="ax-x-inner">
+        <span class="ax-arrow">→</span>
+        <span class="ax-label-x" id="ax-x-lbl">x axis</span>
+        <span style="font-size:0.58rem;color:#806050;letter-spacing:0.04em">% of questions</span>
+      </div>
+    </div>
+
+    <!-- Y axis label -->
+    <div class="ax-y">
+      <div class="ax-y-inner">
+        <span class="ax-arrow">↑</span>
+        <span class="ax-label-y" id="ax-y-lbl">y axis</span>
+        <span style="font-size:0.58rem;color:#405870;letter-spacing:0.04em">% of questions</span>
+      </div>
+    </div>
+
+    <div class="field-hint" id="field-hint">hover · click to lock</div>
+  </div>
+
+  <!-- SIDE PANEL -->
+  <div id="side">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="st-mps">499</div><div class="stat-l">MPs</div></div>
+      <div class="stat"><div class="stat-n" id="st-states">26</div><div class="stat-l">States</div></div>
+      <div class="stat"><div class="stat-n" id="st-parties">37</div><div class="stat-l">Parties</div></div>
+    </div>
+
+    <!-- MP focus card (hidden until hover) -->
+    <div id="mp-focus" class="empty"></div>
+
+    <!-- Breakdown -->
+    <div class="breakdown">
+      <div class="bd-title">Avg sector share — filtered set</div>
+      <div id="bd-rows"></div>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend">
+      <div class="leg-title">Party</div>
+      <div class="leg-items" id="leg-items"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tt"><div id="tt-inner"></div></div>
+
+<script>
+// ── DATA (injected) ──
+__DATA_PLACEHOLDER__
+
+// ── PARTY COLORS ──
+const PC = {
+  BJP:'#FF6B35',INC:'#19B5FF',DMK:'#E31E24',YSRCP:'#2196F3',
+  AITC:'#2ECC71',SS:'#FF9933',SHS:'#FF9933','JD(U)':'#3CB371',
+  BJD:'#009900',BSP:'#1565C0',BRS:'#E91E8C',TDP:'#F9A825',
+  NCP:'#0D47A1','SP':'#CC3232',CPIM:'#C62828',CPI:'#B71C1C',
+  INLD:'#4CAF50',MIM:'#4DB6AC',OTHER:'#6060A0'
+};
+const pc = p => PC[p] || PC.OTHER;
+
+// ── IMAGE CACHE ──
+const imgCache = {};
+const IMG_BASE = 'https://prsindia.org/files/mptrack/17-lok-sabha/profile_image/';
+// Map from mp_id to image URL — injected
+const MP_IMGS = __IMGS_PLACEHOLDER__;
+
+// ── STATE ──
+let S = {
+  xSec: DATA.sectors[0],
+  ySec: DATA.sectors[2],
+  state: null,
+  party: null,
+  gender: null,
+  query: '',
+  locked: null,
+  hovered: null,
+};
+
+// ── CANVAS ──
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W=0,H=0,DPR=devicePixelRatio||1;
+const PAD={top:44,right:20,bottom:44,left:44};
+let dots=[]; // computed
+
+function resize(){
+  const rect=document.getElementById('field').getBoundingClientRect();
+  W=rect.width; H=rect.height;
+  canvas.width=W*DPR; canvas.height=H*DPR;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  ctx.scale(DPR,DPR);
+}
+
+const plotW=()=>W-PAD.left-PAD.right;
+const plotH=()=>H-PAD.top-PAD.bottom;
+
+// Determine axis range: 0..maxVal for each sector
+function axRange(sec){
+  const max = DATA.sector_stats[sec].max;
+  return Math.ceil(max/5)*5 || 25;
+}
+
+function toXY(xVal,yVal){
+  const xr=axRange(S.xSec), yr=axRange(S.ySec);
+  return {
+    cx: PAD.left+(xVal/xr)*plotW(),
+    cy: PAD.top+(1-yVal/yr)*plotH()
+  };
+}
+
+// Radius from total questions
+let minQ=Infinity,maxQ=0;
+DATA.mps.forEach(m=>{ if(m.total<minQ)minQ=m.total; if(m.total>maxQ)maxQ=m.total; });
+function getR(total){
+  const t=(total-minQ)/(maxQ-minQ);
+  return 3.5 + t*13; // range 3.5–16.5px
+}
+
+// Deterministic jitter
+function jitter(id){
+  let h=0; for(let c of id) h=(h*31+c.charCodeAt(0))&0x7fffffff;
+  return { dx:((h&0xff)-128)/128*5, dy:(((h>>8)&0xff)-128)/128*5 };
+}
+
+function computeDots(){
+  dots=DATA.mps.map(mp=>{
+    const xv=mp.s[S.xSec]||0, yv=mp.s[S.ySec]||0;
+    const {cx,cy}=toXY(xv,yv);
+    const {dx,dy}=jitter(mp.id);
+    return {mp,cx,cy,dx,dy,xv,yv,r:getR(mp.total)};
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const pw=plotW(),ph=plotH();
+  const xr=axRange(S.xSec),yr=axRange(S.ySec);
+
+  // Grid
+  const nGrid=5;
+  for(let i=0;i<=nGrid;i++){
+    const xg=PAD.left+(i/nGrid)*pw;
+    const yg=PAD.top+(i/nGrid)*ph;
+    ctx.strokeStyle='rgba(255,255,255,0.04)';
+    ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(xg,PAD.top);ctx.lineTo(xg,PAD.top+ph);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(PAD.left,yg);ctx.lineTo(PAD.left+pw,yg);ctx.stroke();
+    // Labels
+    const xv=Math.round(i/nGrid*xr);
+    const yv=Math.round((1-i/nGrid)*yr);
+    ctx.fillStyle='rgba(100,100,120,0.6)';
+    ctx.font=`${8/DPR*DPR}px SF Mono,monospace`;
+    ctx.textAlign='center';
+    ctx.fillText(xv+'%',xg,PAD.top+ph+14);
+    ctx.textAlign='right';
+    ctx.fillText(yv+'%',PAD.left-5,yg+3);
+  }
+
+  // Average lines
+  const xAvg=DATA.avg[S.xSec], yAvg=DATA.avg[S.ySec];
+  const {cx:axL}=toXY(xAvg,0);
+  const {cy:ayL}=toXY(0,yAvg);
+  ctx.setLineDash([4,4]);
+  ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(240,120,64,0.2)';
+  ctx.beginPath();ctx.moveTo(axL,PAD.top);ctx.lineTo(axL,PAD.top+ph);ctx.stroke();
+  ctx.strokeStyle='rgba(74,176,240,0.2)';
+  ctx.beginPath();ctx.moveTo(PAD.left,ayL);ctx.lineTo(PAD.left+pw,ayL);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Avg labels
+  ctx.font=`8px SF Mono,monospace`;
+  ctx.fillStyle='rgba(240,120,64,0.5)';
+  ctx.textAlign='center';
+  ctx.fillText('avg',axL,PAD.top-4);
+  ctx.fillStyle='rgba(74,176,240,0.5)';
+  ctx.textAlign='left';
+  ctx.fillText('avg',PAD.left+4,ayL-4);
+
+  // Active filter set
+  const active=new Set(filteredMPs().map(m=>m.id));
+
+  // Draw dots — back to front: dimmed first, then active
+  dots.slice().sort((a,b)=>a.mp.total-b.mp.total).forEach(d=>{
+    const isActive=active.has(d.mp.id);
+    const isLocked=S.locked&&S.locked.id===d.mp.id;
+    const isHov=S.hovered&&S.hovered.id===d.mp.id;
+    const r=d.r;
+    const col=pc(d.mp.party);
+
+    if(!isActive){
+      ctx.globalAlpha=0.05;
+      ctx.beginPath();ctx.arc(d.cx+d.dx,d.cy+d.dy,r,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.fill();
+    } else {
+      const alpha=isLocked||isHov?1:0.72;
+      ctx.globalAlpha=alpha;
+      // Glow for locked
+      if(isLocked){
+        ctx.shadowColor=col;ctx.shadowBlur=18;
+      }
+      ctx.beginPath();ctx.arc(d.cx+d.dx,d.cy+d.dy,r,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.fill();
+      ctx.shadowBlur=0;
+
+      if(isHov||isLocked){
+        ctx.globalAlpha=1;
+        ctx.strokeStyle='#fff';ctx.lineWidth=1.5;
+        ctx.stroke();
+      }
+    }
+  });
+  ctx.globalAlpha=1;
+
+  // Labels for search matches
+  if(S.query.length>1){
+    dots.forEach(d=>{
+      if(active.has(d.mp.id)&&d.mp.name.toLowerCase().includes(S.query.toLowerCase())){
+        ctx.globalAlpha=1;
+        ctx.fillStyle='#e0d8c8';
+        ctx.font='bold 9px SF Mono,monospace';
+        ctx.textAlign='center';
+        ctx.fillText(d.mp.name.split(' ')[0],d.cx+d.dx,d.cy+d.dy-d.r-4);
+      }
+    });
+  }
+}
+
+// ── FILTERS ──
+function filteredMPs(){
+  return DATA.mps.filter(m=>{
+    if(S.state&&m.state!==S.state)return false;
+    if(S.party&&m.party!==S.party)return false;
+    if(S.gender&&m.gender.toLowerCase()!==S.gender.toLowerCase())return false;
+    if(S.query){
+      const q=S.query.toLowerCase();
+      if(!m.name.toLowerCase().includes(q)&&!m.state.toLowerCase().includes(q)&&!m.party.toLowerCase().includes(q))return false;
+    }
+    return true;
+  });
+}
+
+// ── BUILD FILTER PILLS ──
+const TOP_STATES=[...new Set(DATA.mps.map(m=>m.state))].sort((a,b)=>{
+  return DATA.mps.filter(m=>m.state===b).length-DATA.mps.filter(m=>m.state===a).length;
+}).slice(0,9);
+
+const MAJOR_PARTIES=['BJP','INC','DMK','YSRCP','AITC','SS','JD(U)','BJD','BSP','BRS'];
+
+function buildPills(){
+  // State
+  const sp=document.getElementById('state-pills');
+  sp.innerHTML='';
+  ['All',...TOP_STATES].forEach(s=>{
+    const p=mk('span','pill'+(s==='All'?S.state===null?' on':'':S.state===s?' on':''));
+    p.textContent=s==='All'?'All':s.replace(' and ','/').replace('Pradesh','Prad.').replace('Bengal','Bengal');
+    p.title=s;
+    p.onclick=()=>{ S.state=s==='All'?null:s; S.locked=null; refresh(); };
+    sp.appendChild(p);
+  });
+
+  // Party
+  const pp=document.getElementById('party-pills');
+  pp.innerHTML='';
+  ['All',...MAJOR_PARTIES].forEach(pt=>{
+    const p=mk('span','pill'+(pt==='All'?S.party===null?' on':'':S.party===pt?' on party-on':''));
+    if(pt!=='All'&&S.party===pt){ p.style.background=pc(pt); p.style.borderColor=pc(pt); }
+    p.textContent=pt;
+    p.onclick=()=>{ S.party=pt==='All'?null:pt; S.locked=null; refresh(); };
+    pp.appendChild(p);
+  });
+
+  // Gender
+  const gp=document.getElementById('gender-pills');
+  gp.innerHTML='';
+  ['All','Male','Female'].forEach(g=>{
+    const p=mk('span','pill'+(g==='All'?S.gender===null?' on':'':S.gender===g?' on':''));
+    p.textContent=g;
+    p.onclick=()=>{ S.gender=g==='All'?null:g; S.locked=null; refresh(); };
+    gp.appendChild(p);
+  });
+
+  // Axis pills
+  buildAxisPills();
+}
+
+function buildAxisPills(){
+  const xEl=document.getElementById('x-axis-pills');
+  const yEl=document.getElementById('y-axis-pills');
+  xEl.innerHTML='<span style="font-size:0.58rem;color:#f07840;letter-spacing:0.08em;text-transform:uppercase;flex-shrink:0">→ x</span>';
+  yEl.innerHTML='<span style="font-size:0.58rem;color:#4ab0f0;letter-spacing:0.08em;text-transform:uppercase;flex-shrink:0">↑ y</span>';
+
+  DATA.sectors.forEach(s=>{
+    const lbl=DATA.labels[s]||s;
+    const isX=S.xSec===s, isY=S.ySec===s;
+    const cls='pill axis-pill'+(isX?' x-on':isY?' y-on':'');
+    const p=mk('span',cls);
+    p.textContent=lbl;
+    p.title=s;
+    p.onclick=(e)=>{
+      e.stopPropagation();
+      // Determine which axis to set based on current state
+      // Right click / shift = y axis, else x axis
+      // Actually let's toggle: if already x, set as y. If already y, set as x. Else set as x.
+      if(isX){ /* already x, ignore */ return; }
+      if(isY){ /* already y, ignore */ return; }
+      // If shift held → y axis
+      if(e.shiftKey){ if(S.xSec!==s) S.ySec=s; }
+      else { if(S.ySec!==s) S.xSec=s; }
+      computeDots(); refresh();
+    };
+    // Also make double-click set y
+    p.ondblclick=(e)=>{
+      e.stopPropagation();
+      if(S.xSec!==s) S.ySec=s;
+      computeDots(); refresh();
+    };
+    xEl.appendChild(p);
+    yEl.appendChild(p.cloneNode(true));
+  });
+
+  // Re-attach events for y row
+  const yPills=yEl.querySelectorAll('.axis-pill');
+  yPills.forEach(p=>{
+    const s=DATA.sectors.find(sec=>(DATA.labels[sec]||sec)===p.textContent);
+    if(!s) return;
+    p.onclick=(e)=>{
+      e.stopPropagation();
+      if(S.ySec===s||S.xSec===s) return;
+      S.ySec=s;
+      computeDots(); refresh();
+    };
+    p.ondblclick=(e)=>{ e.stopPropagation(); };
+  });
+  // X row re-attach
+  const xPills=xEl.querySelectorAll('.axis-pill');
+  xPills.forEach(p=>{
+    const s=DATA.sectors.find(sec=>(DATA.labels[sec]||sec)===p.textContent);
+    if(!s) return;
+    p.onclick=(e)=>{
+      e.stopPropagation();
+      if(S.xSec===s||S.ySec===s) return;
+      S.xSec=s;
+      computeDots(); refresh();
+    };
+  });
+
+  document.getElementById('ax-x-lbl').textContent=DATA.labels[S.xSec]||S.xSec;
+  document.getElementById('ax-y-lbl').textContent=DATA.labels[S.ySec]||S.ySec;
+}
+
+// ── SIDE PANEL ──
+function updatePanel(){
+  const fps=filteredMPs();
+  document.getElementById('st-mps').textContent=fps.length;
+  document.getElementById('st-states').textContent=new Set(fps.map(m=>m.state)).size;
+  document.getElementById('st-parties').textContent=new Set(fps.map(m=>m.party)).size;
+  document.getElementById('hdr-count').textContent=fps.length+' MPs visible';
+
+  // Sector breakdown
+  const avgs=DATA.sectors.map(s=>{
+    const vals=fps.map(m=>m.s[s]||0);
+    const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+    return {s,avg};
+  }).sort((a,b)=>b.avg-a.avg).slice(0,12);
+
+  const maxA=Math.max(...avgs.map(a=>a.avg),0.01);
+  document.getElementById('bd-rows').innerHTML=avgs.map(({s,avg})=>{
+    const ga=DATA.avg[s];
+    const tp=(ga/DATA.sector_stats[s].max)*100;
+    const col=avg>=ga?'#f07840':'#4a90cc';
+    return `<div class="bd-row">
+      <div class="bd-meta"><span class="bd-name">${DATA.labels[s]||s}</span><span class="bd-val">${avg.toFixed(1)}%</span></div>
+      <div class="bd-track">
+        <div class="bd-fill" style="width:${(avg/DATA.sector_stats[s].max*100).toFixed(1)}%;background:${col};opacity:0.8"></div>
+        <div class="bd-avg-tick" style="left:${tp.toFixed(1)}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Legend
+  const ps=[...new Set(fps.map(m=>m.party))].sort((a,b)=>fps.filter(m=>m.party===b).length-fps.filter(m=>m.party===a).length);
+  document.getElementById('leg-items').innerHTML=ps.map(p=>{
+    const n=fps.filter(m=>m.party===p).length;
+    return `<span class="leg-item" title="${p}"><span class="leg-dot" style="background:${pc(p)}"></span>${p} <span class="leg-n">${n}</span></span>`;
+  }).join('');
+}
+
+function updateMPCard(mp,isLocked){
+  const el=document.getElementById('mp-focus');
+  if(!mp){ el.className='empty'; return; }
+  el.className='';
+
+  const imgUrl=MP_IMGS[mp.id];
+  const topSecs=DATA.sectors.map(s=>({s,v:mp.s[s]||0})).sort((a,b)=>b.v-a.v).slice(0,5);
+  const maxSec=topSecs[0].v||1;
+  const col=pc(mp.party);
+  const initials=mp.name.split(' ').slice(0,2).map(w=>w[0]).join('');
+
+  el.innerHTML=`
+    <div class="mp-photo-wrap">
+      ${imgUrl
+        ? `<img class="mp-photo" src="${imgUrl}" alt="${mp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" onload="this.classList.add('loaded')"><div class="mp-photo-init" style="display:none">${initials}</div>`
+        : `<div class="mp-photo-init">${initials}</div>`
+      }
+      <div class="mp-info">
+        <div class="mp-name">${mp.name}</div>
+        <div class="mp-sub">${mp.constituency}</div>
+        <div class="mp-sub">${mp.state}</div>
+        <div class="mp-party-badge" style="background:${col}22;color:${col};border:1px solid ${col}44">${mp.party}</div>
+      </div>
+    </div>
+    <div class="mp-sectors">
+      ${topSecs.map(({s,v})=>{
+        const ga=DATA.avg[s];
+        const tpPct=(ga/DATA.sector_stats[s].max*100).toFixed(1);
+        const col2=v>=ga?'#f07840':'#4a90cc';
+        return `<div class="mp-sector-row">
+          <span class="mp-sec-name">${DATA.labels[s]||s}</span>
+          <div class="mp-sec-track">
+            <div class="mp-sec-bar" style="width:${(v/DATA.sector_stats[s].max*100).toFixed(1)}%;background:${col2};height:4px;border-radius:2px"></div>
+            <div class="mp-sec-avg" style="left:${tpPct}%"></div>
+          </div>
+          <span class="mp-sec-val">${v.toFixed(1)}%</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="mp-total">${mp.total.toLocaleString()} questions total &nbsp;·&nbsp; ${mp.gender}</div>
+    ${isLocked?'<div class="lock-hint">Click again to unlock</div>':''}
+  `;
+}
+
+// ── TOOLTIP ──
+const tt=document.getElementById('tt');
+function showTT(mp,x,y){
+  const imgUrl=MP_IMGS[mp.id];
+  const col=pc(mp.party);
+  const topSecs=DATA.sectors.map(s=>({s,v:mp.s[s]||0})).sort((a,b)=>b.v-a.v).slice(0,4);
+  const initials=mp.name.split(' ').slice(0,2).map(w=>w[0]).join('');
+
+  tt.innerHTML=`
+    ${imgUrl
+      ? `<img class="tt-img" src="${imgUrl}" alt="" onerror="this.style.display='none'">`
+      : `<div class="tt-img-init">${initials}</div>`
+    }
+    <div class="tt-body">
+      <div class="tt-name">${mp.name}</div>
+      <div class="tt-sub">${mp.constituency} · ${mp.state}</div>
+      <span class="tt-badge" style="background:${col}22;color:${col};border:1px solid ${col}44">${mp.party}</span>
+      ${topSecs.map(({s,v})=>`<div class="tt-row"><span class="tt-sec">${DATA.labels[s]||s}</span><span class="tt-val">${v.toFixed(1)}%</span></div>`).join('')}
+      <div class="tt-total">${mp.total.toLocaleString()} questions · ${mp.gender}</div>
+    </div>`;
+
+  const tw=tt.offsetWidth, th=tt.offsetHeight;
+  const px=Math.min(x+16,window.innerWidth-tw-8);
+  const py=Math.min(y+12,window.innerHeight-th-8);
+  tt.style.left=px+'px';
+  tt.style.top=py+'px';
+  tt.classList.add('show');
+}
+function hideTT(){ tt.classList.remove('show'); }
+
+// ── HIT TEST ──
+function hit(mx,my){
+  const active=new Set(filteredMPs().map(m=>m.id));
+  let best=null, bd=16;
+  // Check largest dots first (they're on top)
+  [...dots].sort((a,b)=>b.mp.total-a.mp.total).forEach(d=>{
+    if(!active.has(d.mp.id)) return;
+    const dx=mx-(d.cx+d.dx), dy=my-(d.cy+d.dy);
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<Math.max(d.r+2,10)&&dist<bd){ bd=dist; best=d; }
+  });
+  return best?best.mp:null;
+}
+
+// ── CANVAS EVENTS ──
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  const mp=hit(e.clientX-r.left,e.clientY-r.top);
+  if(mp){
+    canvas.style.cursor='pointer';
+    if(!S.locked||S.locked.id!==mp.id){
+      S.hovered=mp;
+      showTT(mp,e.clientX,e.clientY);
+      if(!S.locked){ updateMPCard(mp,false); draw(); }
+    }
+  } else {
+    canvas.style.cursor='crosshair';
+    hideTT();
+    if(!S.locked){ S.hovered=null; updateMPCard(null,false); draw(); }
+  }
+});
+
+canvas.addEventListener('mouseleave',()=>{
+  hideTT();
+  if(!S.locked){ S.hovered=null; updateMPCard(null,false); draw(); }
+});
+
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  const mp=hit(e.clientX-r.left,e.clientY-r.top);
+  if(mp){
+    S.locked=S.locked&&S.locked.id===mp.id?null:mp;
+  } else {
+    S.locked=null;
+  }
+  S.hovered=mp;
+  updateMPCard(S.locked||mp,!!S.locked);
+  draw();
+});
+
+// ── SEARCH ──
+document.getElementById('srch').addEventListener('input',e=>{
+  S.query=e.target.value.trim();
+  S.locked=null;
+  refresh();
+});
+
+// ── REFRESH ──
+function refresh(){
+  buildPills();
+  updatePanel();
+  draw();
+}
+
+// ── HELPERS ──
+function mk(tag,cls){ const el=document.createElement(tag); el.className=cls; return el; }
+
+// ── RESIZE ──
+let rt;
+window.addEventListener('resize',()=>{
+  clearTimeout(rt);
+  rt=setTimeout(()=>{ resize(); computeDots(); draw(); },120);
+});
+
+// ── INIT ──
+resize();
+computeDots();
+buildPills();
+updatePanel();
+draw();
+</script>
+</body>
+</html>

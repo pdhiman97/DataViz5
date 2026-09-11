@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Parliamentary Mic Check — 17th Lok Sabha Decoded</title>
+  <meta name="description" content="A scrollytelling data story dissecting what 543 Indian MPs actually discussed in the 17th Lok Sabha. Built from 1,00,000+ parliamentary questions." />
+  <meta property="og:title" content="The Parliamentary Mic Check" />
+  <meta property="og:description" content="What do 543 MPs actually talk about? A data story from 17th Lok Sabha records." />
+  <meta property="og:type" content="article" />
+  <meta name="theme-color" content="#0A0F1E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="data_embedded.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar" role="progressbar" aria-label="Reading progress"></div>
+
+<!-- MASTHEAD -->
+<header id="masthead">
+  <div class="logo">Mic<span>Check</span> · 17th Lok Sabha</div>
+  <nav class="acts" aria-label="Story acts">
+    <a href="#act-waffle">The Breakdown</a>
+    <a href="#act-party">Party Playbooks</a>
+    <a href="#act-explorer">MP Explorer</a>
+    <a href="#act-verdict">The Verdict</a>
+  </nav>
+</header>
+
+<!-- TOOLTIP -->
+<div id="tooltip" role="tooltip" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- HERO                                                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="hero" aria-labelledby="hero-headline">
+  <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.6"></canvas>
+
+  <p id="hero-eyebrow">17th Lok Sabha · 2019–2024 · PRS India Data</p>
+
+  <h1 id="hero-headline">
+    What did the<br/>
+    mic actually <em>capture?</em>
+  </h1>
+
+  <p id="hero-sub">
+    Turn on the news and Parliament looks like an endless yelling match over scandals and party drama.
+    But when the mic was open, what were 543 MPs <em>actually</em> talking about?
+    We dug through every question asked across five years of the 17th Lok Sabha to find out.
+  </p>
+
+  <div id="hero-stats">
+    <div class="hero-stat-item anim-fade-up anim-delay-1">
+      <span class="hero-stat-num" data-count="559">0</span>
+      <span class="hero-stat-lbl">MPs tracked</span>
+    </div>
+    <div class="hero-stat-item anim-fade-up anim-delay-2">
+      <span class="hero-stat-num" data-count="100030" data-fmt="+">0</span>
+      <span class="hero-stat-lbl">Questions asked</span>
+    </div>
+    <div class="hero-stat-item anim-fade-up anim-delay-3">
+      <span class="hero-stat-num" data-count="63">0</span>
+      <span class="hero-stat-lbl">Ministries covered</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+      <path d="M8 3v14M3 13l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    Scroll to begin
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ACT 1: THE BREAKDOWN                                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="act-waffle" class="scroll-section" aria-label="Act 1: The Breakdown">
+
+  <!-- STICKY CANVAS -->
+  <div class="scroll-canvas-col" style="position:sticky">
+
+    <!-- Step 0: Intro panel -->
+    <div class="canvas-panel is-active" id="panel-step-0" style="display:flex;opacity:1;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:2rem">
+      <div style="font-family:var(--font-serif);font-size:clamp(5rem,10vw,9rem);font-weight:900;line-height:1;color:var(--text-prime);text-align:center">
+        100
+      </div>
+      <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-mute);letter-spacing:0.18em;text-transform:uppercase;text-align:center">
+        units of parliamentary attention
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:220px">
+        <div style="width:32px;height:32px;background:#F59E0B;border-radius:4px;animation:fadeUp 0.3s both"></div>
+        <div style="width:32px;height:32px;background:#EC4899;border-radius:4px;animation:fadeUp 0.3s 0.05s both"></div>
+        <div style="width:32px;height:32px;background:#22C55E;border-radius:4px;animation:fadeUp 0.3s 0.1s both"></div>
+        <div style="width:32px;height:32px;background:#3B82F6;border-radius:4px;animation:fadeUp 0.3s 0.15s both"></div>
+        <div style="width:32px;height:32px;background:#8B5CF6;border-radius:4px;animation:fadeUp 0.3s 0.2s both"></div>
+        <div style="width:32px;height:32px;background:#10B981;border-radius:4px;animation:fadeUp 0.3s 0.25s both"></div>
+        <div style="width:32px;height:32px;background:#F87171;border-radius:4px;animation:fadeUp 0.3s 0.3s both"></div>
+        <div style="width:32px;height:32px;background:#64748B;border-radius:4px;animation:fadeUp 0.3s 0.35s both"></div>
+        <div style="width:32px;height:32px;background:#F97316;border-radius:4px;animation:fadeUp 0.3s 0.4s both"></div>
+        <div style="width:32px;height:32px;background:rgba(255,255,255,0.06);border-radius:4px;animation:fadeUp 0.3s 0.45s both"></div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-mute);max-width:28ch;text-align:center;line-height:1.5">
+        Each unit represents 1% of all 1,00,030 parliamentary questions filed over five years.
+      </p>
+    </div>
+
+    <!-- Step 1b: Waffle -->
+    <div class="canvas-panel" id="panel-step-1b">
+      <div id="waffle-container">
+        <div id="waffle-header">
+          <div id="waffle-title">100 Units of Parliamentary Attention</div>
+          <div id="waffle-unit-label">1 cell = ~1,000 questions</div>
+        </div>
+        <div id="waffle-grid" role="img" aria-label="Waffle chart showing breakdown of parliamentary questions by topic"></div>
+        <div id="waffle-legend" role="list" aria-label="Category legend"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TEXT -->
+  <div class="scroll-text-col">
+    <div class="steps-wrapper">
+
+      <!-- STEP 0 -->
+      <div class="step is-active" data-step="step-0">
+        <div class="step-act">ACT 0 — The Hook</div>
+        <h2>Every session, thousands of questions.<br/>Is it <span class="hl">signal or noise?</span></h2>
+        <p>
+          Over five years, 559 MPs of the 17th Lok Sabha collectively filed over a lakh parliamentary questions across 63 ministries.
+          That's an ocean of political attention — but where did it flow?
+        </p>
+        <p>
+          We mapped every question to eight thematic categories and shrank the entire parliamentary record down to a single number:
+          <strong>100 units</strong> of attention.
+        </p>
+        <div class="step-stat">
+          Total questions filed: <strong>1,00,030</strong><br/>
+          Across 559 MPs · 63 ministries · 5 years
+        </div>
+      </div>
+
+      <!-- STEP 1b -->
+      <div class="step" data-step="step-1b" id="act-waffle-step">
+        <div class="step-act">ACT 1 — The Breakdown</div>
+        <h2>Shrink five years down to <span class="hl">100 units.</span><br/>Here's who got the mic.</h2>
+        <p>
+          Health, education, and welfare dominate — nearly <strong>22 units</strong> — roughly equal to State and special interest motions. Infrastructure and energy claim 18 units. Agriculture, despite being India's largest employer, gets 13.
+        </p>
+        <p>
+          Defence and foreign affairs, often the loudest in news cycles, represent just <strong>3 units</strong> of actual parliamentary attention. The real work happens in the unglamorous middle.
+        </p>
+        <div class="step-stat">
+          💡 Hover any cell to see what's inside.<br/>
+          Click a category to isolate it.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ACT 2: PARTY PLAYBOOKS                                 -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="act-party" class="scroll-section" aria-label="Act 2: Party Playbooks">
+
+  <!-- STICKY CANVAS -->
+  <div class="scroll-canvas-col">
+
+    <!-- Party bars panel -->
+    <div class="canvas-panel" id="panel-step-2">
+      <div id="party-bars-container">
+        <div style="font-family:var(--font-serif);font-size:1rem;color:var(--text-prime);margin-bottom:0.4rem">
+          Party Playbooks: What Each Bloc Prioritised
+        </div>
+        <p style="font-size:0.72rem;color:var(--text-mute);margin-bottom:1rem;font-family:var(--font-mono)">
+          Coloured segments = question share by topic category
+        </p>
+        <div id="party-toggle">
+          <button class="toggle-btn active" data-mode="raw">Raw Count</button>
+          <button class="toggle-btn" data-mode="pct">% of Party Time</button>
+        </div>
+        <div id="party-bars-svg-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TEXT -->
+  <div class="scroll-text-col">
+    <div class="steps-wrapper">
+
+      <div class="step" data-step="step-2">
+        <div class="step-act">ACT 2 — Party Playbooks</div>
+        <h2>Does your party decide<br/><span class="hl">what you talk about?</span></h2>
+        <p>
+          The ruling BJP coalition, with the most MPs and floor time, dominates every category by raw count. But the <em>shape</em> of attention differs strikingly.
+        </p>
+        <p>
+          BJP and allies concentrate more heavily in <strong>Finance and Infrastructure</strong> — the hallmarks of central scheme stewardship. The opposition — INC, DMK, AITC — lean into <strong>Health, Education, and Rights</strong>. Regional parties spike on State and Special Motions, the arena where local crises get parliamentary air.
+        </p>
+        <div class="step-stat">
+          BJP: <strong>10,316</strong> debate appearances<br/>
+          INC: <strong>3,329</strong> · Regional bloc: <strong>4,000+</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ACT 3: THE PARTICIPATION INEQUALITY                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="scroll-section" aria-label="Act 3: Participation inequality">
+
+  <!-- STICKY CANVAS -->
+  <div class="scroll-canvas-col">
+    <div class="canvas-panel" id="panel-step-3">
+      <div style="width:100%;max-width:500px">
+        <div style="font-family:var(--font-serif);font-size:1rem;color:var(--text-prime);margin-bottom:1.5rem">
+          Debates Participation: The Long Tail
+        </div>
+
+        <!-- Histogram-style visual using CSS bars -->
+        <div id="participation-histogram">
+          <div style="display:flex;align-items:flex-end;gap:3px;height:140px;margin-bottom:0.5rem">
+            <!-- Bars representing debate ranges: 0, 1-10, 11-30, 31-80, 81-200, 200+ -->
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:var(--a-silent);border-radius:3px 3px 0 0;height:130px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">0<br/>debates</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:var(--a-silent);border-radius:3px 3px 0 0;height:88px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">1–10</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:#64748B;border-radius:3px 3px 0 0;height:60px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">11–30</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:#8B5CF6;border-radius:3px 3px 0 0;height:38px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">31–80</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:#3B82F6;border-radius:3px 3px 0 0;height:18px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">81–200</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:100%;background:#F59E0B;border-radius:3px 3px 0 0;height:8px;opacity:0.85"></div>
+              <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-mute);text-align:center">200+</div>
+            </div>
+          </div>
+          <div style="font-size:0.7rem;color:var(--text-mute);text-align:center;font-family:var(--font-mono)">Number of debates participated → (559 MPs)</div>
+        </div>
+
+        <div style="margin-top:2rem">
+          <div style="font-size:0.78rem;color:var(--text-dim);margin-bottom:0.75rem">Top 10% MPs (55 MPs) captured:</div>
+          <div class="participation-track" style="height:10px;background:var(--bg-raised);border-radius:5px;overflow:hidden;margin-bottom:0.4rem">
+            <div class="participation-fill" style="height:100%;border-radius:5px;background:linear-gradient(90deg,#F97316,#FCD34D);width:0%;transition:width 1.2s var(--ease-out)" id="ineq-bar"></div>
+          </div>
+          <div class="participation-labels">
+            <span>0%</span>
+            <span id="ineq-pct-label" style="color:var(--accent-saffron);font-weight:700">42.1%</span>
+            <span>100%</span>
+          </div>
+          <div style="font-size:0.7rem;color:var(--text-mute);margin-top:0.3rem;font-family:var(--font-mono)">
+            of all debate appearances
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
+          <div style="background:var(--bg-card);border-radius:8px;padding:0.8rem;text-align:center">
+            <div style="font-family:var(--font-mono);font-size:1.4rem;font-weight:700;color:var(--text-prime)">1,261</div>
+            <div style="font-size:0.65rem;color:var(--text-mute);text-transform:uppercase;letter-spacing:0.07em">Max debates (1 MP)</div>
+          </div>
+          <div style="background:var(--bg-card);border-radius:8px;padding:0.8rem;text-align:center">
+            <div style="font-family:var(--font-mono);font-size:1.4rem;font-weight:700;color:var(--text-prime)">0</div>
+            <div style="font-size:0.65rem;color:var(--text-mute);text-transform:uppercase;letter-spacing:0.07em">Min debates (some MPs)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TEXT -->
+  <div class="scroll-text-col">
+    <div class="steps-wrapper">
+      <div class="step" data-step="step-3">
+        <div class="step-act">ACT 3 — The Participation Gap</div>
+        <h2>A handful of voices.<br/>A <span class="hl">silenced majority.</span></h2>
+        <p>
+          The Lok Sabha floor is not a democracy of voices. Out of 559 MPs tracked, the top 10% — just 55 people — made <strong>42%</strong> of all debate appearances in the entire five-year term.
+        </p>
+        <p>
+          At the other extreme: the maximum any MP participated was <strong>1,261 debates</strong> (Pushpendra Singh Chandel, BJP, UP). Several MPs recorded near-zero floor time despite high attendance. They show up. They just don't speak.
+        </p>
+        <p>
+          The average MP: <strong>41 debates, 182 questions</strong> in five years. That's less than one question per working week.
+        </p>
+        <div class="step-stat">
+          Avg debates per MP: <strong>41</strong><br/>
+          Top 10% average: <strong>175 debates</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ACT 4: MP ARCHETYPE EXPLORER                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="act-explorer" class="scroll-section" aria-label="Act 4: MP Explorer">
+
+  <!-- STICKY CANVAS -->
+  <div class="scroll-canvas-col">
+    <div class="canvas-panel" id="panel-step-4">
+      <div id="beeswarm-container">
+
+        <div id="beeswarm-controls">
+          <input id="mp-search-input" type="search" placeholder="Search MP, constituency, or state…" autocomplete="off" aria-label="Search MPs" />
+          <select class="filter-select" id="filter-party" aria-label="Filter by party">
+            <option value="">All Parties</option>
+          </select>
+          <select class="filter-select" id="filter-gender" aria-label="Filter by gender">
+            <option value="">All Genders</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+          <select class="filter-select" id="filter-archetype" aria-label="Filter by archetype">
+            <option value="">All Types</option>
+            <option value="Policy Hawk">🦁 Policy Hawks</option>
+            <option value="Local Champion">📢 Local Champions</option>
+            <option value="Question Machine">📑 Question Machines</option>
+            <option value="Silent Observer">🤫 Silent Observers</option>
+          </select>
+        </div>
+
+        <div id="beeswarm-svg-wrap" aria-label="Beeswarm chart of MPs by debate count and topic focus">
+          <svg id="beeswarm-svg" role="img" aria-label="Each dot is an MP. Position shows debates attended and whether they focus on national or local topics. Size shows questions asked."></svg>
+        </div>
+
+        <div id="archetype-legend" role="list" aria-label="MP archetype legend">
+          <div class="archetype-legend-item" role="listitem">
+            <div class="archetype-dot" style="background:var(--a-hawk)"></div>
+            <div>
+              <div class="archetype-name">🦁 Policy Hawk</div>
+              <div class="archetype-desc">High debates, broad national/legislative focus (65 MPs)</div>
+            </div>
+          </div>
+          <div class="archetype-legend-item" role="listitem">
+            <div class="archetype-dot" style="background:var(--a-champ)"></div>
+            <div>
+              <div class="archetype-name">📢 Local Champion</div>
+              <div class="archetype-desc">Concentrated on constituency & Zero Hour issues</div>
+            </div>
+          </div>
+          <div class="archetype-legend-item" role="listitem">
+            <div class="archetype-dot" style="background:var(--a-machine)"></div>
+            <div>
+              <div class="archetype-name">📑 Question Machine</div>
+              <div class="archetype-desc">Top written-question volume, lower floor time (52 MPs)</div>
+            </div>
+          </div>
+          <div class="archetype-legend-item" role="listitem">
+            <div class="archetype-dot" style="background:var(--a-silent)"></div>
+            <div>
+              <div class="archetype-name">🤫 Silent Observer</div>
+              <div class="archetype-desc">High attendance, minimal speech (440 MPs)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TEXT -->
+  <div class="scroll-text-col">
+    <div class="steps-wrapper">
+      <div class="step" data-step="step-4">
+        <div class="step-act">ACT 4 — MP Archetypes</div>
+        <h2>559 MPs.<br/><span class="hl">4 parliamentary personalities.</span></h2>
+        <p>
+          Not all MPs engage with Parliament the same way. We classified all 559 tracked MPs into four archetypes based on debates participated, questions filed, and topic diversity.
+        </p>
+        <p>
+          The majority — <strong>440 MPs (79%)</strong> — are Silent Observers: high attendance, but few floor appearances. Just 65 are Policy Hawks who combine high debate counts with cross-sector national policy work. 52 are Question Machines who work the system through written submissions.
+        </p>
+        <p>
+          Each dot is an MP. <strong>Click any dot</strong> to see their full profile. Use the search to find your representative.
+        </p>
+        <div class="step-stat">
+          Dot size = questions filed<br/>
+          X axis = debates · Y axis = national vs. local focus
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ACT 5: THE VERDICT                                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="act-verdict" class="scroll-section" aria-label="Act 5: The Verdict">
+
+  <!-- STICKY CANVAS -->
+  <div class="scroll-canvas-col">
+    <div class="canvas-panel" id="panel-step-5">
+      <div id="conclusion-container">
+
+        <div style="font-family:var(--font-serif);font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;color:var(--text-prime)">
+          Parliamentary Balance Sheet
+        </div>
+        <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-mute);margin-bottom:1.25rem;letter-spacing:0.1em">
+          17TH LOK SABHA · 2019–2024 · SIGNAL FROM THE NOISE
+        </div>
+
+        <div class="verdict-card v1">
+          <div class="verdict-number">Finding 01</div>
+          <div class="verdict-headline">The Quiet Engine of Policy</div>
+          <div class="verdict-body">
+            Health, education, and welfare absorbed <span class="verdict-stat">22 in 100</span> units of parliamentary attention — equal to all state and special motions combined. Budget-driven mandates dominate, not emergency spectacle.
+          </div>
+        </div>
+
+        <div class="verdict-card v2">
+          <div class="verdict-number">Finding 02</div>
+          <div class="verdict-headline">The Voice Concentration Problem</div>
+          <div class="verdict-body">
+            Top <span class="verdict-stat">10% of MPs</span> made <span class="verdict-stat">42%</span> of all debate appearances. One MP reached 1,261 appearances. The floor is not equal.
+          </div>
+          <div id="participation-bar-wrap">
+            <div class="participation-track">
+              <div class="participation-fill" id="conclusion-fill" style="width:0%;transition:width 1.5s var(--ease-out)"></div>
+            </div>
+            <div class="participation-labels">
+              <span>0% MPs</span>
+              <span style="color:var(--accent-saffron)">Top 10% → 42% of voice</span>
+              <span>100%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="verdict-card v3">
+          <div class="verdict-number">Finding 03</div>
+          <div class="verdict-headline">The Silenced Majority</div>
+          <div class="verdict-body">
+            <span class="verdict-stat">440 MPs (79%)</span> are classified as Silent Observers — present, but rarely at the podium. The median MP filed <span class="verdict-stat">155 questions</span> but participated in just <span class="verdict-stat">23 debates</span> in five years.
+          </div>
+        </div>
+
+        <div style="margin-top:0.5rem;padding:1rem;background:var(--bg-raised);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-family:var(--font-mono);font-size:0.68rem;color:var(--text-mute);letter-spacing:0.1em;margin-bottom:0.5rem">DATA NOTES</div>
+          <div style="font-size:0.72rem;color:var(--text-mute);line-height:1.55">
+            Data from PRS India's MP Track for the 17th Lok Sabha (2019–2024). Questions matrix covers 63 ministry categories. Debate counts and questions parsed directly from PRS India public records. Archetypes are computed classifications, not official designations.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCROLL TEXT -->
+  <div class="scroll-text-col">
+    <div class="steps-wrapper">
+      <div class="step" data-step="step-5">
+        <div class="step-act">ACT 5 — The Verdict</div>
+        <h2>The mic was open.<br/>But <span class="hl">who spoke into it?</span></h2>
+        <p>
+          The 17th Lok Sabha's actual debate record tells a different story from the one on your news feed. The real parliamentary work — unglamorous, committee-level, question-hour-driven — happens in health, education, agriculture, and infrastructure, not in crisis motions.
+        </p>
+        <p>
+          But the floor itself is deeply unequal. A small cohort of highly active MPs carries the load while the majority attend, vote, and stay quiet.
+        </p>
+        <p>
+          The Parliamentary Mic Check isn't a judgment. It's a map. Now you know what the mic actually captured — and who was close to it.
+        </p>
+        <div class="step-stat">
+          Source: PRS India MP Track · 17th Lok Sabha<br/>
+          Analysis: 559 MPs · 1,00,030 questions
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FOOTER                                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<footer id="story-footer" aria-label="Data sources and credits">
+  <div class="footer-source">
+    <strong style="color:var(--text-dim)">Data Source:</strong>
+    <a href="https://prsindia.org/mptrack/17-lok-sabha" target="_blank" rel="noopener">PRS India — MP Track, 17th Lok Sabha (2019–2024)</a>
+  </div>
+  <div class="footer-source">
+    <strong style="color:var(--text-dim)">Methodology:</strong>
+    Questions classified into 8 thematic categories aggregated from 63 ministry categories. Archetype classification based on debates count, question volume, and topic diversity (Shannon entropy). All data is sourced directly from PRS India public records.
+  </div>
+  <div class="footer-source">
+    <strong style="color:var(--text-dim)">Visual Stack:</strong>
+    D3.js v7 · Vanilla HTML/CSS/JS · Scrollytelling via IntersectionObserver
+  </div>
+  <div class="footer-source" style="margin-top:0.5rem;color:var(--text-mute)">
+    The Parliamentary Mic Check · 17th Lok Sabha Decoded · 2024
+  </div>
+</footer>
+
+<!-- MP CARD MODAL -->
+<div id="mp-modal" role="dialog" aria-modal="true" aria-labelledby="mp-card-title">
+  <div id="mp-card">
+    <span id="mp-card-title" class="sr-only">MP Profile</span>
+    <!-- Filled dynamically by script.js -->
+  </div>
+</div>
+
+<!-- Inline participation bar trigger -->
+<script>
+  // Trigger participation bar animation when panel-step-3 becomes active
+  const ineqObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      const bar = document.getElementById('ineq-bar');
+      if (bar) setTimeout(() => { bar.style.width = '42.1%'; }, 300);
+    }
+  }, { threshold: 0.3 });
+  const panel3 = document.getElementById('panel-step-3');
+  if (panel3) ineqObserver.observe(panel3);
+
+  const conclusionObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      const fill = document.getElementById('conclusion-fill');
+      if (fill) setTimeout(() => { fill.style.width = '42.1%'; }, 400);
+    }
+  }, { threshold: 0.3 });
+  const panel5 = document.getElementById('panel-step-5');
+  if (panel5) conclusionObserver.observe(panel5);
+</script>
+
+</body>
+</html>

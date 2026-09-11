@@ -1,0 +1,74 @@
+[
+  {
+    "category": "State & Special Motions",
+    "total_questions": 21629,
+    "share_percentage": 21.6,
+    "waffle_units": 22,
+    "ruling_pct": 63.0,
+    "opposition_pct": 23.4,
+    "regional_pct": 13.5
+  },
+  {
+    "category": "Health, Education & Welfare",
+    "total_questions": 21539,
+    "share_percentage": 21.5,
+    "waffle_units": 22,
+    "ruling_pct": 60.0,
+    "opposition_pct": 25.8,
+    "regional_pct": 14.1
+  },
+  {
+    "category": "Infrastructure & Energy",
+    "total_questions": 18228,
+    "share_percentage": 18.2,
+    "waffle_units": 18,
+    "ruling_pct": 62.1,
+    "opposition_pct": 24.0,
+    "regional_pct": 14.0
+  },
+  {
+    "category": "Agriculture & Rural",
+    "total_questions": 13184,
+    "share_percentage": 13.2,
+    "waffle_units": 13,
+    "ruling_pct": 62.4,
+    "opposition_pct": 23.2,
+    "regional_pct": 14.4
+  },
+  {
+    "category": "Finance & Economy",
+    "total_questions": 10026,
+    "share_percentage": 10.0,
+    "waffle_units": 10,
+    "ruling_pct": 55.6,
+    "opposition_pct": 28.0,
+    "regional_pct": 16.4
+  },
+  {
+    "category": "Environment & Water",
+    "total_questions": 7937,
+    "share_percentage": 7.9,
+    "waffle_units": 8,
+    "ruling_pct": 64.1,
+    "opposition_pct": 21.6,
+    "regional_pct": 14.3
+  },
+  {
+    "category": "Law & Home Affairs",
+    "total_questions": 4602,
+    "share_percentage": 4.6,
+    "waffle_units": 5,
+    "ruling_pct": 51.7,
+    "opposition_pct": 33.1,
+    "regional_pct": 15.2
+  },
+  {
+    "category": "Defence & Foreign Affairs",
+    "total_questions": 2885,
+    "share_percentage": 2.9,
+    "waffle_units": 3,
+    "ruling_pct": 55.8,
+    "opposition_pct": 29.4,
+    "regional_pct": 14.8
+  }
+]
