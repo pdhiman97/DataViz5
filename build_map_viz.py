@@ -6,6 +6,7 @@ Script to generate the Lok Sabha Parliamentary Questions Map Visualization:
 - Full list of all 20 Parliamentary Sectors displayed cleanly on the right side panel with color pips, progress bars, % shares, and click-to-filter interaction
 """
 import json
+import os
 
 with open('/Users/aashima/Desktop/DataViz5/data/loksabha-questions/curated/viz_v5_data.json') as f:
     DATA = json.load(f)
@@ -1546,4 +1547,12 @@ with open('/Users/aashima/Desktop/DataViz5/outcome/loksabha-questions/index.html
 with open('/Users/aashima/Desktop/DataViz5/outcome/loksabha-questions/map.html', 'w') as f:
     f.write(HTML_FINAL)
 
+with open('/Users/aashima/Desktop/DataViz5/index.html', 'w') as f:
+    f.write(HTML_FINAL)
+
+os.makedirs('/Users/aashima/Desktop/DataViz5/docs', exist_ok=True)
+with open('/Users/aashima/Desktop/DataViz5/docs/index.html', 'w') as f:
+    f.write(HTML_FINAL)
+
 print(f"Generated Proportional Bubble Map with Non-Overlapping Palette: {len(HTML_FINAL)//1024} KB")
+
