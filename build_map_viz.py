@@ -1306,8 +1306,23 @@ function updateStoryPanel(focusedMP) {
   if (focusedMP) {
     shares = focusedMP.s;
   } else {
+    // Base MPs matching current State/Party/Search scope (independent of sector display toggles)
+    const baseMPs = DATA.mps.filter(m => {
+      if (stateFilter !== 'All' && m.state !== stateFilter) return false;
+      if (partyFilter !== 'All' && m.party !== partyFilter) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        const match = m.name.toLowerCase().includes(q) ||
+                      m.constituency.toLowerCase().includes(q) ||
+                      m.state.toLowerCase().includes(q) ||
+                      m.party.toLowerCase().includes(q);
+        if (!match) return false;
+      }
+      return true;
+    });
+
     DATA.sectors.forEach(sec => {
-      const values = filteredMPs.map(m => m.s[sec] || 0);
+      const values = baseMPs.map(m => m.s[sec] || 0);
       shares[sec] = values.length
         ? values.reduce((sum, v) => sum + v, 0) / values.length
         : 0;
