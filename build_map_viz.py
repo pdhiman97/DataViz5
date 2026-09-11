@@ -1,9 +1,9 @@
 """
 Script to generate the Lok Sabha Parliamentary Questions Map Visualization:
-- Unambiguous 20-sector palette with distinct hues, tints, and saturation (eliminating red/pink overlap)
-- Health is the sole Crimson Red, Women & Child Dev is bright Orchid, Petroleum is Oil Black, Textiles is Lavender
+- Includes interactive Hide / Unhide eye toggle for every sector on the right panel
+- Unambiguous 20-sector palette with distinct hues across the spectrum
 - Clean, unobstructed map with minimal floating bubble-size legend on the bottom left
-- Full list of all 20 Parliamentary Sectors displayed cleanly on the right side panel with color pips, progress bars, % shares, and click-to-filter interaction
+- Synchronized to root index.html, docs/index.html, and outcome folders
 """
 import json
 import os
@@ -268,7 +268,7 @@ header {
 /* ── MAIN WORKSPACE ── */
 #workspace {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 370px;
   flex: 1;
   min-height: 0;
   overflow: hidden;
@@ -562,7 +562,7 @@ header {
 .rankings-section {
   flex: 1;
   overflow-y: auto;
-  padding: 0.65rem 1.15rem 1rem;
+  padding: 0.65rem 1rem 1rem;
   min-height: 0;
 }
 .rankings-section::-webkit-scrollbar { width: 4px; }
@@ -570,9 +570,16 @@ header {
 
 .rankings-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.rankings-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 .rankings-heading {
   font-size: 0.6rem;
@@ -582,15 +589,37 @@ header {
   color: var(--ink);
 }
 .rankings-subheading {
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   color: var(--ink-muted);
+}
+
+.sector-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.btn-sec-action {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--ink-secondary);
+  font-size: 0.56rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.btn-sec-action:hover {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--primary);
 }
 
 .rank-row {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.28rem 0.35rem;
+  gap: 0.35rem;
+  padding: 0.25rem 0.3rem;
   border-radius: 6px;
   border: 1px solid transparent;
   transition: all 0.12s ease;
@@ -602,18 +631,51 @@ header {
   border-color: var(--accent-blue-border);
 }
 
+.btn-eye-toggle {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 0.15rem 0.2rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.btn-eye-toggle:hover {
+  color: var(--primary);
+  background: var(--surface);
+}
+
+.rank-row.is-sector-hidden {
+  opacity: 0.35;
+  background: transparent !important;
+}
+.rank-row.is-sector-hidden .rank-topic-name {
+  text-decoration: line-through;
+  color: var(--ink-muted);
+}
+.rank-row.is-sector-hidden .rank-bar-fill {
+  background: #cbd5e1 !important;
+}
+.rank-row.is-sector-hidden .btn-eye-toggle {
+  color: #ef4444;
+}
+
 .rank-color-pip {
-  width: 8px;
-  height: 8px;
+  width: 7.5px;
+  height: 7.5px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .rank-position {
-  font-size: 0.65rem;
+  font-size: 0.63rem;
   font-weight: 700;
   color: var(--ink-muted);
-  flex: 0 0 16px;
+  flex: 0 0 14px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -622,7 +684,7 @@ header {
   font-size: 0.67rem;
   font-weight: 500;
   color: var(--ink-secondary);
-  flex: 0 0 115px;
+  flex: 0 0 105px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -868,11 +930,17 @@ header {
       <!-- MP Focus Card -->
       <div id="mp-card" class="hidden"></div>
 
-      <!-- ALL 20 Parliamentary Sectors Rankings -->
+      <!-- ALL 20 Parliamentary Sectors Rankings with Hide/Unhide -->
       <div class="rankings-section">
         <div class="rankings-header">
-          <span class="rankings-heading">All 20 Parliamentary Sectors</span>
-          <span class="rankings-subheading">% of Questions · Click to Filter</span>
+          <div class="rankings-title-group">
+            <span class="rankings-heading">Parliamentary Sectors</span>
+            <span class="rankings-subheading" id="sectors-active-pill">20 / 20 Active · Click 👁 to toggle</span>
+          </div>
+          <div class="sector-actions">
+            <button class="btn-sec-action" id="btn-show-all-sec" title="Show all sectors">Show All</button>
+            <button class="btn-sec-action" id="btn-clear-all-sec" title="Hide all sectors">Clear</button>
+          </div>
         </div>
         <div id="rankings-container"></div>
       </div>
@@ -892,18 +960,18 @@ const INDIA_GEOJSON = __GEOJSON_PLACEHOLDER__;
 
 let currentZoomScale = 1;
 
-// ── 20-SECTOR DISTINCT COLOR PALETTE (ZERO RED/PINK OVERLAP) ──
+// ── 20-SECTOR DISTINCT COLOR PALETTE ──
 const SECTOR_COLORS = {
   // RED: Sole primary crimson in entire palette
   'Health and Family Welfare': { fill: '#dc2626', stroke: '#b91c1c', text: '#991b1b', bg: '#fee2e2', name: 'Health & Family Welfare' },
 
-  // BLUES: High-contrast azure, cyan, sky, navy
+  // BLUES
   'Railways': { fill: '#2563eb', stroke: '#1d4ed8', text: '#1e40af', bg: '#dbeafe', name: 'Railways' },
   'Jal Shakti': { fill: '#0284c7', stroke: '#0369a1', text: '#075985', bg: '#e0f2fe', name: 'Jal Shakti (Water Resources)' },
   'Civil Aviation': { fill: '#38bdf8', stroke: '#0284c7', text: '#0369a1', bg: '#f0f9ff', name: 'Civil Aviation' },
   'Communications': { fill: '#1e3a8a', stroke: '#172554', text: '#172554', bg: '#eff6ff', name: 'Communications (IT/Telecom)' },
 
-  // GREENS: Forest, lime, olive
+  // GREENS
   'Agriculture and Farmers Welfare': { fill: '#16a34a', stroke: '#15803d', text: '#14532d', bg: '#dcfce7', name: 'Agriculture & Farmers' },
   'Environment, Forest and Climate Change': { fill: '#84cc16', stroke: '#65a30d', text: '#3f6212', bg: '#ecfccb', name: 'Environment & Climate' },
   'Labour and Employment': { fill: '#4d7c0f', stroke: '#365314', text: '#1a2e05', bg: '#f7fee7', name: 'Labour & Employment' },
@@ -912,7 +980,7 @@ const SECTOR_COLORS = {
   'AYUSH': { fill: '#14b8a6', stroke: '#0d9488', text: '#115e59', bg: '#ccfbf1', name: 'AYUSH' },
   'Housing and Urban Affairs': { fill: '#0f766e', stroke: '#115e59', text: '#134e4a', bg: '#ccfbf1', name: 'Housing & Urban Affairs' },
 
-  // PURPLES & ORCHIDS (Bright, distinctly non-red)
+  // PURPLES & ORCHIDS
   'Education': { fill: '#4f46e5', stroke: '#4338ca', text: '#312e81', bg: '#e0e7ff', name: 'Education' },
   'Women and Child Development': { fill: '#d946ef', stroke: '#c026d3', text: '#86198f', bg: '#fae8ff', name: 'Women & Child Dev' },
   'Textiles': { fill: '#8b5cf6', stroke: '#7c3aed', text: '#5b21b6', bg: '#ede9fe', name: 'Textiles' },
@@ -967,6 +1035,9 @@ let partyFilter = 'All';
 let searchQuery = '';
 let lockedMP = null;
 let hoveredMP = null;
+
+// Track which sectors are hidden (empty set = all visible)
+let hiddenSectors = new Set();
 
 // ── D3 MAP SETUP WITH DYNAMIC FIT-EXTENT ──
 const mapContainer = document.getElementById('map-container');
@@ -1053,12 +1124,16 @@ function renderBaseMap() {
     .text(d => d.properties.st_nm || d.properties.name);
 }
 
-// ── FILTERING ──
+// ── FILTERING (WITH SECTOR VISIBILITY SUPPORT) ──
 function getFilteredMPs() {
   return DATA.mps.filter(m => {
     if (m.total < minQuestionsFilter) return false;
 
-    if (selectedCategory !== 'All') {
+    // Check if MP's top sector is hidden
+    if (selectedCategory === 'All') {
+      if (hiddenSectors.has(m.top_sector)) return false;
+    } else {
+      if (hiddenSectors.has(selectedCategory)) return false;
       const catShare = m.s[selectedCategory] || 0;
       if (catShare <= 0) return false;
     }
@@ -1195,7 +1270,7 @@ function onCategoryChange() {
   updateStoryPanel(lockedMP);
 }
 
-// ── UPDATE STORY PANEL & ALL 20 SECTORS RANKINGS ──
+// ── UPDATE STORY PANEL & ALL 20 SECTORS WITH HIDE / UNHIDE ──
 function updateStoryPanel(focusedMP) {
   const filteredMPs = getFilteredMPs();
   document.getElementById('active-count').textContent = `${filteredMPs.length} MPs Shown`;
@@ -1239,6 +1314,13 @@ function updateStoryPanel(focusedMP) {
     });
   }
 
+  // Update active sectors counter pill
+  const activeSecCount = DATA.sectors.length - hiddenSectors.size;
+  const secPill = document.getElementById('sectors-active-pill');
+  if (secPill) {
+    secPill.textContent = `${activeSecCount} / 20 Active · Click 👁 to toggle`;
+  }
+
   // Rank ALL 20 sectors descending
   const allSectorsRanked = DATA.sectors.map(sec => ({
     sec,
@@ -1252,10 +1334,19 @@ function updateStoryPanel(focusedMP) {
   container.innerHTML = allSectorsRanked.map((item, idx) => {
     const palette = getSectorPalette(item.sec);
     const isHighlighted = selectedCategory === item.sec ? 'is-highlighted' : '';
+    const isHidden = hiddenSectors.has(item.sec);
     const barWidth = Math.max(3, Math.round((item.val / maxShare) * 100));
 
+    // Eye icon (Open eye for visible, Slashed eye for hidden)
+    const eyeSvg = isHidden
+      ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
+      : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+
     return `
-      <div class="rank-row ${isHighlighted}" data-sec="${item.sec}" title="Click to filter by ${item.label}">
+      <div class="rank-row ${isHighlighted} ${isHidden ? 'is-sector-hidden' : ''}" data-sec="${item.sec}" title="Click to filter by ${item.label}">
+        <button class="btn-eye-toggle" data-sec="${item.sec}" title="${isHidden ? 'Unhide sector on map' : 'Hide sector from map'}">
+          ${eyeSvg}
+        </button>
         <span class="rank-position" style="color:${palette.fill}">#${idx + 1}</span>
         <span class="rank-color-pip" style="background:${palette.fill}"></span>
         <span class="rank-topic-name" title="${item.label}">${item.label}</span>
@@ -1267,17 +1358,52 @@ function updateStoryPanel(focusedMP) {
     `;
   }).join('');
 
-  // Allow clicking any sector in the right panel to filter
+  // Eye toggle button click listeners
+  container.querySelectorAll('.btn-eye-toggle').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation(); // prevent triggering row click
+      const sec = btn.getAttribute('data-sec');
+      if (hiddenSectors.has(sec)) {
+        hiddenSectors.delete(sec);
+      } else {
+        hiddenSectors.add(sec);
+      }
+      updateDots();
+      updateStoryPanel(lockedMP);
+    };
+  });
+
+  // Clicking row focuses that sector
   container.querySelectorAll('.rank-row').forEach(row => {
     row.onclick = () => {
       const sec = row.getAttribute('data-sec');
       const catSelect = document.getElementById('sel-category');
+      
+      // If clicking a hidden sector, unhide it first
+      if (hiddenSectors.has(sec)) {
+        hiddenSectors.delete(sec);
+      }
+      
       selectedCategory = (selectedCategory === sec) ? 'All' : sec;
       catSelect.value = selectedCategory;
       onCategoryChange();
     };
   });
 }
+
+// Sector Actions: Show All / Clear All
+document.getElementById('btn-show-all-sec').onclick = () => {
+  hiddenSectors.clear();
+  updateDots();
+  updateStoryPanel(lockedMP);
+};
+
+document.getElementById('btn-clear-all-sec').onclick = () => {
+  // Hide all except currently selected (or all)
+  DATA.sectors.forEach(s => hiddenSectors.add(s));
+  updateDots();
+  updateStoryPanel(lockedMP);
+};
 
 function renderMPCard(mp) {
   const card = document.getElementById('mp-card');
@@ -1554,5 +1680,4 @@ os.makedirs('/Users/aashima/Desktop/DataViz5/docs', exist_ok=True)
 with open('/Users/aashima/Desktop/DataViz5/docs/index.html', 'w') as f:
     f.write(HTML_FINAL)
 
-print(f"Generated Proportional Bubble Map with Non-Overlapping Palette: {len(HTML_FINAL)//1024} KB")
-
+print(f"Generated Proportional Bubble Map with Sector Hide/Unhide: {len(HTML_FINAL)//1024} KB")
