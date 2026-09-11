@@ -854,28 +854,41 @@ const INDIA_GEOJSON = {"type": "FeatureCollection", "features": [{"type": "Featu
 
 let currentZoomScale = 1;
 
-// ── 20-SECTOR DISTINCT COLOR PALETTE ──
+// ── 20-SECTOR DISTINCT COLOR PALETTE (ZERO RED/PINK OVERLAP) ──
 const SECTOR_COLORS = {
-  'Health and Family Welfare': { fill: '#e11d48', stroke: '#be123c', text: '#9f1239', bg: '#ffe4e6', name: 'Health & Family Welfare' },
+  // RED: Sole primary crimson in entire palette
+  'Health and Family Welfare': { fill: '#dc2626', stroke: '#b91c1c', text: '#991b1b', bg: '#fee2e2', name: 'Health & Family Welfare' },
+
+  // BLUES: High-contrast azure, cyan, sky, navy
   'Railways': { fill: '#2563eb', stroke: '#1d4ed8', text: '#1e40af', bg: '#dbeafe', name: 'Railways' },
-  'Agriculture and Farmers Welfare': { fill: '#16a34a', stroke: '#15803d', text: '#14532d', bg: '#dcfce7', name: 'Agriculture & Farmers' },
-  'Finance': { fill: '#d97706', stroke: '#b45309', text: '#78350f', bg: '#fef3c7', name: 'Finance & Economy' },
-  'Environment, Forest and Climate Change': { fill: '#65a30d', stroke: '#4d7c0f', text: '#365314', bg: '#ecfccb', name: 'Environment & Climate' },
-  'Women and Child Development': { fill: '#db2777', stroke: '#be185d', text: '#831843', bg: '#fce7f3', name: 'Women & Child Dev' },
-  'Education': { fill: '#7c3aed', stroke: '#6d28d9', text: '#4c1d95', bg: '#ede9fe', name: 'Education' },
-  'AYUSH': { fill: '#0891b2', stroke: '#0e7490', text: '#155e75', bg: '#cffafe', name: 'AYUSH' },
-  'Home Affairs': { fill: '#475569', stroke: '#334155', text: '#0f172a', bg: '#f1f5f9', name: 'Home Affairs & Security' },
-  'Road Transport and Highways': { fill: '#ea580c', stroke: '#c2410c', text: '#7c2d12', bg: '#ffedd5', name: 'Road Transport & Highways' },
   'Jal Shakti': { fill: '#0284c7', stroke: '#0369a1', text: '#075985', bg: '#e0f2fe', name: 'Jal Shakti (Water Resources)' },
-  'Rural Development': { fill: '#b45309', stroke: '#92400e', text: '#78350f', bg: '#fef3c7', name: 'Rural Development' },
-  'Commerce and Industry': { fill: '#ca8a04', stroke: '#a16207', text: '#713f12', bg: '#fef9c3', name: 'Commerce & Industry' },
-  'Housing and Urban Affairs': { fill: '#0d9488', stroke: '#0f766e', text: '#115e59', bg: '#ccfbf1', name: 'Housing & Urban Affairs' },
-  'Petroleum and Natural Gas': { fill: '#991b1b', stroke: '#7f1d1d', text: '#450a0a', bg: '#fee2e2', name: 'Petroleum & Gas' },
-  'Civil Aviation': { fill: '#06b6d4', stroke: '#0891b2', text: '#164e63', bg: '#cffafe', name: 'Civil Aviation' },
-  'Textiles': { fill: '#c026d3', stroke: '#a21caf', text: '#701a75', bg: '#fae8ff', name: 'Textiles' },
-  'Consumer Affairs, Food and Public Distribution': { fill: '#eab308', stroke: '#ca8a04', text: '#713f12', bg: '#fef9c3', name: 'Consumer Affairs & Food' },
-  'Labour and Employment': { fill: '#4d7c0f', stroke: '#3f6212', text: '#1a2e05', bg: '#f7fee7', name: 'Labour & Employment' },
-  'Communications': { fill: '#4f46e5', stroke: '#4338ca', text: '#312e81', bg: '#e0e7ff', name: 'Communications (IT/Telecom)' }
+  'Civil Aviation': { fill: '#38bdf8', stroke: '#0284c7', text: '#0369a1', bg: '#f0f9ff', name: 'Civil Aviation' },
+  'Communications': { fill: '#1e3a8a', stroke: '#172554', text: '#172554', bg: '#eff6ff', name: 'Communications (IT/Telecom)' },
+
+  // GREENS: Forest, lime, olive
+  'Agriculture and Farmers Welfare': { fill: '#16a34a', stroke: '#15803d', text: '#14532d', bg: '#dcfce7', name: 'Agriculture & Farmers' },
+  'Environment, Forest and Climate Change': { fill: '#84cc16', stroke: '#65a30d', text: '#3f6212', bg: '#ecfccb', name: 'Environment & Climate' },
+  'Labour and Employment': { fill: '#4d7c0f', stroke: '#365314', text: '#1a2e05', bg: '#f7fee7', name: 'Labour & Employment' },
+
+  // TEAL / AQUA
+  'AYUSH': { fill: '#14b8a6', stroke: '#0d9488', text: '#115e59', bg: '#ccfbf1', name: 'AYUSH' },
+  'Housing and Urban Affairs': { fill: '#0f766e', stroke: '#115e59', text: '#134e4a', bg: '#ccfbf1', name: 'Housing & Urban Affairs' },
+
+  // PURPLES & ORCHIDS (Bright, distinctly non-red)
+  'Education': { fill: '#4f46e5', stroke: '#4338ca', text: '#312e81', bg: '#e0e7ff', name: 'Education' },
+  'Women and Child Development': { fill: '#d946ef', stroke: '#c026d3', text: '#86198f', bg: '#fae8ff', name: 'Women & Child Dev' },
+  'Textiles': { fill: '#8b5cf6', stroke: '#7c3aed', text: '#5b21b6', bg: '#ede9fe', name: 'Textiles' },
+
+  // YELLOWS & ORANGES
+  'Finance': { fill: '#eab308', stroke: '#ca8a04', text: '#854d0e', bg: '#fef9c3', name: 'Finance & Economy' },
+  'Road Transport and Highways': { fill: '#f97316', stroke: '#ea580c', text: '#9a3412', bg: '#ffedd5', name: 'Road Transport & Highways' },
+  'Commerce and Industry': { fill: '#d97706', stroke: '#b45309', text: '#78350f', bg: '#fef3c7', name: 'Commerce & Industry' },
+  'Consumer Affairs, Food and Public Distribution': { fill: '#ca8a04', stroke: '#a16207', text: '#713f12', bg: '#fef9c3', name: 'Consumer Affairs & Food' },
+
+  // BROWNS & NEUTRALS
+  'Rural Development': { fill: '#854d0e', stroke: '#713f12', text: '#451a03', bg: '#fef3c7', name: 'Rural Development' },
+  'Home Affairs': { fill: '#475569', stroke: '#334155', text: '#0f172a', bg: '#f1f5f9', name: 'Home Affairs & Security' },
+  'Petroleum and Natural Gas': { fill: '#1c1917', stroke: '#0c0a09', text: '#0c0a09', bg: '#f5f5f4', name: 'Petroleum & Gas' }
 };
 
 const DEFAULT_SECTOR_COLOR = { fill: '#64748b', stroke: '#475569', text: '#1e293b', bg: '#f1f5f9', name: 'Other Sector' };
