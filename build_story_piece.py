@@ -46,6 +46,9 @@ celebrity_names = [
     'deepak adhikari', 'dev adhikari', 'ravi kishan', 'ravindra shyamnarayan', 'manoj tiwari', 'dinesh lal yadav'
 ]
 
+# High-profile, iconic household names specifically referenced in our story:
+iconic_celebs = ['ajay-singh-dharmendra-deol', 'manoj-tiwari', 'nusrat-jahan-ruhi', 'mimi-chakraborty', 'ravindra-shyamnarayan', 'adhikari-deepak-dev']
+
 all_mps = []
 for r in rows:
     name_clean = r['name'].strip()
@@ -84,13 +87,13 @@ for r in rows:
     elif questions >= 500:
         archetype = 'Legislative Workhorse'
     elif debates >= 150:
-        archetype = 'Floor Orator'
+        archetype = 'Active Debater'
     elif (att or 0) >= 90 and questions >= 300:
         archetype = 'Diligent Lawmaker'
     elif (att or 0) < 50 and questions < 50:
-        archetype = 'Chronic Absentee'
+        archetype = 'Low Activity MP'
     else:
-        archetype = 'Constituency Delegate'
+        archetype = 'Regular MP'
         
     mp_obj = {
         'id': r['mp_id'],
@@ -1115,33 +1118,33 @@ footer {{
 
 <!-- Publication Header -->
 <div class="header-top">
-  <span class="publication-tag">Data Journalism Special · <strong>The Roll Call Project</strong></span>
+  <span class="publication-tag">Data Report · <strong>The Roll Call Project</strong></span>
   <span>17th Lok Sabha (2019–2024)</span>
 </div>
 
 <!-- Main Hero Section -->
 <header class="hero">
-  <div class="kicker">Parliamentary Scrutiny & Data Investigation</div>
+  <div class="kicker">Parliamentary Activity Report</div>
   <h1>Five Years of Roll Calls</h1>
-  <p class="hero-subtitle">What India’s 543 MPs actually did once the cameras turned off</p>
+  <p class="hero-subtitle">What India’s 543 MPs did after the cameras turned off</p>
   <div class="byline">
-    <span>By The Creative Technologist Team</span>
+    <span>559 MP Profiles</span>
     <span>·</span>
-    <span>559 Member Profiles Analyzed</span>
+    <span>101,999 Questions Filed</span>
     <span>·</span>
-    <span>101,999 Questions Tracked</span>
+    <span>2019–2024 Full Term</span>
   </div>
 </header>
 
 <!-- Editorial Narrative Intro -->
 <article class="editorial-intro">
-  <p class="dropcap">When we watch Parliament on TV or viral social media clips, it looks like pure high school drama: walkouts, shouting matches, flying paper planes, and dramatic gestures in the well. Naturally, the public judges MPs like school kids: <em>Did they show up?</em> Media outlets celebrate 90% attendance like gold stars.</p>
-  <p>But parliamentary democracy is not won by sitting on leather benches with an ID badge. What happens after members swipe in for morning roll call? Who actually questions the executive, and who turns their microphone off for five full years?</p>
+  <p class="dropcap">Television coverage of India's parliament often focuses on noisy walkouts, shouting matches, and disruptions. Because of this, citizens often judge MPs by a single simple number: <em>their attendance score</em>.</p>
+  <p>Showing up to swipe your card is only part of the job. The real day-to-day legislative oversight happens in writing, when MPs file formal questions that legally require ministries to respond. Here is what the numbers tell us about five full years of parliamentary work.</p>
 </article>
 
 <!-- 2x2 Theater Grid -->
 <section class="theater-grid-wrapper">
-  <div class="grid-title">The Spectacle vs. The Scrutiny — Four Moments of Political Theater</div>
+  <div class="grid-title">Moments of Floor Action & Public Scrutiny</div>
   <div class="theater-grid">
     
     <!-- Photo 1 -->
@@ -1150,31 +1153,31 @@ footer {{
         {'<img class="theater-img" src="' + img_wink + '" alt="The Wink">' if img_wink else ''}
         <div class="theater-fallback" style="{'display:none' if img_wink else 'display:flex'}">
           <span class="theater-fallback-icon">😉</span>
-          <strong>The Viral Gesture</strong>
-          <span>Rahul Gandhi’s Parliament Wink</span>
+          <strong>Floor Moments</strong>
+          <span>Rahul Gandhi’s Gesture</span>
         </div>
       </div>
       <div class="theater-caption">
-        <div class="theater-tag">The Viral Moment</div>
+        <div class="theater-tag">Floor Gesture</div>
         <div class="theater-desc">The Wink (Rahul Gandhi)</div>
-        <div class="theater-sub">Floor theatrics that drove 48-hour television debates.</div>
+        <div class="theater-sub">Floor moments that sparked widespread news cycles.</div>
       </div>
     </div>
 
     <!-- Photo 2 -->
     <div class="theater-card">
       <div class="theater-img-wrap">
-        {'<img class="theater-img" src="' + img_reaction + '" alt="The Counter Reaction">' if img_reaction else ''}
+        {'<img class="theater-img" src="' + img_reaction + '" alt="The Floor Speech">' if img_reaction else ''}
         <div class="theater-fallback" style="{'display:none' if img_reaction else 'display:flex'}">
           <span class="theater-fallback-icon">🎙️</span>
-          <strong>The Counter-Reaction</strong>
-          <span>Prime Ministerial Floor Duel</span>
+          <strong>Debate Speeches</strong>
+          <span>Prime Minister’s Reply</span>
         </div>
       </div>
       <div class="theater-caption">
-        <div class="theater-tag">Executive Rebuttal</div>
-        <div class="theater-desc">The Floor Duel (Narendra Modi)</div>
-        <div class="theater-sub">Prime-time oratory and counter-gestures captured by cameras.</div>
+        <div class="theater-tag">Floor Debate</div>
+        <div class="theater-desc">Prime Minister’s Reply (Narendra Modi)</div>
+        <div class="theater-sub">Televised debate replies and major floor speeches.</div>
       </div>
     </div>
 
@@ -1184,14 +1187,14 @@ footer {{
         {'<img class="theater-img" src="' + img_protest + '" alt="Floor Chaos in the Well">' if img_protest else ''}
         <div class="theater-fallback" style="{'display:none' if img_protest else 'display:flex'}">
           <span class="theater-fallback-icon">📜</span>
-          <strong>Floor Chaos in the Well</strong>
-          <span>Protests, placards, and shouting matches</span>
+          <strong>Floor Protests</strong>
+          <span>Placards and disruptions</span>
         </div>
       </div>
       <div class="theater-caption">
-        <div class="theater-tag">Floor Disruption</div>
-        <div class="theater-desc">The Well Protest</div>
-        <div class="theater-sub">Frequent adjournments, placards, and disruptions in the well.</div>
+        <div class="theater-tag">Protests</div>
+        <div class="theater-desc">Well Protests & Adjournments</div>
+        <div class="theater-sub">Opposition and regional protests leading to house adjournments.</div>
       </div>
     </div>
 
@@ -1201,14 +1204,14 @@ footer {{
         {'<img class="theater-img" src="' + img_cash + '" alt="Ethics & Expulsion" >' if img_cash else ''}
         <div class="theater-fallback" style="{'display:none' if img_cash else 'display:flex'}">
           <span class="theater-fallback-icon">⚖️</span>
-          <strong>The Ethics Commitee Probe</strong>
-          <span>Cash-for-query expulsion and controversy</span>
+          <strong>Parliamentary Review</strong>
+          <span>Ethics committee inquiry</span>
         </div>
       </div>
       <div class="theater-caption">
-        <div class="theater-tag">Question Scandal</div>
-        <div class="theater-desc">Ethics & Expulsion (Mahua Moitra)</div>
-        <div class="theater-sub">The ultimate price of parliamentary question access.</div>
+        <div class="theater-tag">Ethics Review</div>
+        <div class="theater-desc">Question Inquiry (Mahua Moitra)</div>
+        <div class="theater-sub">A reminder of how critical parliamentary question access is.</div>
       </div>
     </div>
 
@@ -1222,8 +1225,8 @@ footer {{
     <!-- Sticky Graphic Column -->
     <div class="sticky-graphic">
       <div class="graphic-hud">
-        <span class="hud-title" id="hud-step-title">17th Lok Sabha Swarm</span>
-        <span class="hud-stat" id="hud-node-count">Nodes: <strong>559 MPs</strong></span>
+        <span class="hud-title" id="hud-step-title">17th Lok Sabha</span>
+        <span class="hud-stat" id="hud-node-count">Members: <strong>559 MPs</strong></span>
       </div>
       <div id="viz-container">
         <svg id="viz-svg"></svg>
@@ -1237,13 +1240,13 @@ footer {{
       <div class="step" data-step="1">
         <div class="step-card">
           <div class="step-number">Step 01</div>
-          <h3 class="step-title">The Diligent Classroom</h3>
+          <h3 class="step-title">High Attendance Across the Board</h3>
           <div class="step-body">
-            <p>Look at the attendance sheet for the 17th Lok Sabha (2019–2024). The national average attendance is <strong>78.9%</strong>.</p>
-            <p>Almost every member crowds tightly between 75% and 95%. On paper, India’s parliament looks like a disciplined classroom filled with model students.</p>
+            <p>During the 17th Lok Sabha, the national average attendance was <strong>78.9%</strong>.</p>
+            <p>Most MPs fall between 75% and 95%. Based on attendance alone, most members appear equally active in parliament.</p>
           </div>
           <div class="step-annotation">
-            💡 <strong>Observation:</strong> Swarming along attendance alone creates a comforting illusion of legislative diligence.
+            💡 <strong>Takeaway:</strong> Swiping in each morning gives everyone a similar high score on paper.
           </div>
         </div>
       </div>
@@ -1252,72 +1255,60 @@ footer {{
       <div class="step" data-step="2">
         <div class="step-card">
           <div class="step-number">Step 02</div>
-          <h3 class="step-title">The Myth of the Register</h3>
+          <h3 class="step-title">Attendance vs. Actual Questions</h3>
           <div class="step-body">
-            <p>Showing up is simple. What did they actually do once seated? Real oversight happens on paper: MPs submit formal questions that legally compel ministries to open files.</p>
-            <p>When you plot attendance against questions asked, the statistical correlation collapses to <strong>r = 0.14</strong>. Swiping your card in the morning tells you almost nothing about who is actually doing the work.</p>
+            <p>When you look at how many questions MPs actually submitted to ministries, attendance tells very little of the story.</p>
+            <p>The national median is <strong>163 questions</strong>. Some members with 90% attendance asked fewer than 20 questions, while others asked over 600.</p>
           </div>
           <div class="step-annotation">
-            📊 <strong>Median Reference:</strong> National median is ~163 questions. Notice how widely MPs scatter vertically regardless of 90%+ attendance.
+            📊 <strong>Takeaway:</strong> Sitting in the chamber does not automatically mean raising questions.
           </div>
         </div>
       </div>
 
-      <!-- Step 3 -->
+      <!-- Step 3 (Celebrities vs Workhorses) -->
       <div class="step" data-step="3">
         <div class="step-card">
           <div class="step-number">Step 03</div>
-          <h3 class="step-title">The Cabinet Filter</h3>
+          <h3 class="step-title">Celebrity MPs vs. Question Leaders</h3>
           <div class="step-body">
-            <p>Notice the cluster of dots resting flat on the floor line (0 questions). Did all of them skip work?</p>
-            <p>Not quite. <strong>49 of those dots are Union Ministers</strong> (Amit Shah, Rajnath Singh, Kiren Rijiju, Nitin Gadkari). In parliamentary democracy, ministers answer questions; constitutionally, they are barred from asking them.</p>
+            <p>Famous celebrity MPs often showed very low participation once elected. For example, <strong>Sunny Deol attended 17% of sessions and asked only 4 questions in five years</strong>.</p>
+            <p>Meanwhile, regular constituency MPs like Sukanta Majumdar (654 Qs) and Supriya Sule (629 Qs) asked hundreds of questions to hold ministries accountable.</p>
           </div>
           <div class="step-annotation">
-            🏛️ <strong>Constitutional Rule:</strong> Ministers appear as hollow rings. The remaining 510 backbenchers carry the duty of questioning.
+            ⭐ <strong>Highlighted:</strong> Famous household names vs. the top question askers in India.
           </div>
         </div>
       </div>
 
-      <!-- Step 4 -->
+      <!-- Step 4 (The Maharashtra Pattern) -->
       <div class="step" data-step="4">
         <div class="step-card">
           <div class="step-number">Step 04</div>
-          <h3 class="step-title">Celebrities vs. Quiet Workhorses</h3>
+          <h3 class="step-title">The Maharashtra Pattern</h3>
           <div class="step-body">
-            <p>With the Cabinet filtered, the real contrast emerges. Celebrity MPs often vanish once the cameras shut: <strong>Sunny Deol clocked 17% attendance and asked 4 questions in five full years</strong>; Shatrughan Sinha asked zero.</p>
-            <p>Meanwhile, obscure backbenchers filed over 600 questions each, carrying the day-to-day legislative oversight of the Republic.</p>
+            <p>State habits vary widely. MPs from <strong>Maharashtra averaged 346 questions each</strong>, significantly higher than any other major state.</p>
+            <p>Six of the top ten question-askers in India represent Maharashtra. In comparison, MPs from Uttar Pradesh averaged 125 questions, and Punjab averaged 84.</p>
           </div>
           <div class="step-annotation">
-            ⭐ <strong>Top Workhorses:</strong> Sukanta Majumdar (654 Qs), Supriya Sule (629 Qs & 16 Bills), Kuldeep Rai Sharma (610 Qs & 834 debates).
+            📍 <strong>State Comparison:</strong> Maharashtra MPs filed questions at nearly three times the national rate.
           </div>
         </div>
       </div>
 
-      <!-- Step 5 -->
+      <!-- Step 5 (The Gender Differences) -->
       <div class="step" data-step="5">
         <div class="step-card">
           <div class="step-number">Step 05</div>
-          <h3 class="step-title">The Maharashtra Anomaly</h3>
+          <h3 class="step-title">Topic Focus by Gender</h3>
           <div class="step-body">
-            <p>Geography fundamentally shapes scrutiny. Across party lines (BJP, NCP, Shiv Sena, INC), MPs from <strong>Maharashtra average 346.5 questions each</strong>—far higher than any other major state.</p>
-            <p>Six of the top ten question-askers in India come from Maharashtra alone. Compare that to Uttar Pradesh (averaging 125), Punjab (84), or Himachal Pradesh (27).</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 6 -->
-      <div class="step" data-step="6">
-        <div class="step-card">
-          <div class="step-number">Step 06</div>
-          <h3 class="step-title">The Gender Lens</h3>
-          <div class="step-body">
-            <p>Women MPs hold 82 out of 559 seats. While their average question volume closely mirrors men (177 vs 183), their thematic scrutiny shifts significantly.</p>
-            <p>Female MPs ask <strong>+24.2% more questions on Women & Child Development</strong> and +12.3% on Social Justice, while male MPs ask higher proportions on Civil Aviation (-22%) and Defence.</p>
+            <p>Women MPs made up 82 of 559 members. Their overall question volume was similar to men (177 vs 183 average), but their topics differed notably.</p>
+            <p>Women MPs asked relatively more questions on Women & Child Development and Social Justice, while male MPs focused more on Civil Aviation and Defence.</p>
           </div>
           
           <div class="gender-diverge">
             <div class="gender-diverge-header">
-              <div class="gender-diverge-title">Scrutiny Disparity by Ministry</div>
+              <div class="gender-diverge-title">Relative Topic Differences</div>
               <div class="gender-diverge-legend">
                 <div class="legend-item"><span class="legend-dot f"></span><span>Women Lean</span></div>
                 <div class="legend-item"><span class="legend-dot m"></span><span>Men Lean</span></div>
@@ -1363,17 +1354,17 @@ footer {{
         </div>
       </div>
 
-      <!-- Step 7 -->
-      <div class="step" data-step="7">
+      <!-- Step 6 (The National Wishlist) -->
+      <div class="step" data-step="6">
         <div class="step-card">
-          <div class="step-number">Step 07</div>
+          <div class="step-number">Step 06</div>
           <h3 class="step-title">The National Wishlist</h3>
           <div class="step-body">
-            <p>When MPs write to Delhi, what are they asking for? We talk endlessly about space rockets and geopolitical statecraft, but Parliament runs on daily necessities.</p>
-            <p><strong>Health (7,595), Agriculture (5,122), and Railways (4,809)</strong> soaked up over 17,500 questions. Meanwhile, high-tech ministries operated in near-total silence: <strong>Space received 1 question in five full years</strong>; Atomic Energy received 8.</p>
+            <p>What topics did MPs ask about most? The bulk of questions focused on basic public services: <strong>Health (7,595), Agriculture (5,122), and Railways (4,809)</strong> accounted for over 17,500 questions.</p>
+            <p>In contrast, specialized technical departments received very few questions: the <strong>Department of Space received only 1 question</strong> in five years, and Atomic Energy received 8.</p>
           </div>
           <div class="step-annotation">
-            🪐 <strong>The Space & Atomic Silence:</strong> Out of 101,999 questions filed, only 9 scrutinized the Department of Space and Atomic Energy combined.
+            🚀 <strong>Rarely Asked:</strong> Only 9 total questions asked about Space and Atomic Energy combined.
           </div>
         </div>
       </div>
@@ -1386,7 +1377,7 @@ footer {{
 <section id="explorer">
   <div class="explorer-header">
     <h2>Interactive Explorer: Find Your MP</h2>
-    <p>Search all 559 members of the 17th Lok Sabha to inspect their session attendance, question volume, debates, and top queried ministries.</p>
+    <p>Search members of the 17th Lok Sabha to inspect their session attendance, question volume, debates, and top queried ministries.</p>
   </div>
 
   <div class="explorer-controls">
@@ -1477,7 +1468,7 @@ footer {{
 <footer>
   <div class="footer-inner">
     <div class="footer-title">The Roll Call Project</div>
-    <p class="footer-text">Data sourced from PRS Legislative Research official records of the 17th Lok Sabha (2019–2024). Designed with editorial rigor, anti-default data visualization principles, and physical force simulations.</p>
+    <p class="footer-text">Data sourced from PRS Legislative Research official records of the 17th Lok Sabha (2019–2024).</p>
     <div class="footer-meta">Built with D3.js v7 · Scrollama v3 · Open Data</div>
   </div>
 </footer>
@@ -1506,11 +1497,11 @@ const margin = {{ top: 45, right: 35, bottom: 65, left: 65 }};
 // SVG Definitions for Pattern Fills (Photos of Celebrities & Key Figures)
 const defs = svg.append('defs');
 
-// Groups (Order ensures annotations and nodes sit cleanly without clipping axes)
+// Layer Groups in Strict Z-Index Order (Labels & Annotations on TOP of nodes)
 const gGrid = svg.append('g').attr('class', 'grid-layer');
 const gAxes = svg.append('g').attr('class', 'axis-layer');
-const gAnnotations = svg.append('g').attr('class', 'annotation-layer');
 const gNodes = svg.append('g').attr('class', 'nodes-layer');
+const gAnnotations = svg.append('g').attr('class', 'annotation-layer');
 
 // Scales with safe padded domains to prevent axis/boundary overlap
 const xScale = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
@@ -1526,7 +1517,7 @@ let nodes = MP_DATA.map(d => ({{
   radius: d.is_celeb ? 7.5 : (d.is_minister ? 4.5 : 4.8)
 }}));
 
-// Setup Pattern Images for Celebrities & Workhorses
+// Setup Pattern Images for Celebrities & Workhorses with available photos
 nodes.forEach(d => {{
   if (d.image_url) {{
     const pat = defs.append('pattern')
@@ -1543,7 +1534,7 @@ nodes.forEach(d => {{
   }}
 }});
 
-// ── D3 FORCE SIMULATION (High damping & smooth settling) ──
+// ── D3 FORCE SIMULATION (Smooth settling) ──
 const simulation = d3.forceSimulation(nodes)
   .velocityDecay(0.62) // High drag prevents bouncy flying/pinball effects
   .alphaDecay(0.035)   // Settle smoothly into place
@@ -1552,22 +1543,22 @@ const simulation = d3.forceSimulation(nodes)
 function ticked() {{
   gNodes.selectAll('.mp-node')
     .attr('cx', d => {{
-      const r = (currentStep === 4 && d.is_celeb) ? 14 : d.radius;
+      const r = (currentStep === 3 && d.image_url) ? 14 : d.radius;
       d.x = Math.max(margin.left + r + 2, Math.min(width - margin.right - r - 2, d.x));
       return d.x;
     }})
     .attr('cy', d => {{
-      const r = (currentStep === 4 && d.is_celeb) ? 14 : d.radius;
+      const r = (currentStep === 3 && d.image_url) ? 14 : d.radius;
       d.y = Math.max(margin.top + r + 2, Math.min(height - margin.bottom - r - 2, d.y));
       return d.y;
     }});
 }}
 
-// ── STEP RENDERERS ──
+// ── STEP RENDERERS (6 Total Steps) ──
 
 // Step 1: Attendance Swarm (1D)
 function setupStep1() {{
-  document.getElementById('hud-step-title').textContent = 'Step 1: Attendance Sheet (0% to 100%)';
+  document.getElementById('hud-step-title').textContent = 'Step 1: Attendance (0% to 100%)';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
@@ -1675,93 +1666,69 @@ function setupStep2() {{
   updateNodeAppearance(() => 'var(--slate)', () => 0.85, () => false, () => 4.8);
 }}
 
-// Step 3: The Cabinet Filter
+// Step 3: Celebrities vs Workhorses (Photos only, names clearly shown)
 function setupStep3() {{
-  document.getElementById('hud-step-title').textContent = 'Step 3: The Cabinet Filter (Ministers = 0 Qs)';
-  setupStep2(); // keep same coordinate grid
-
-  // Bracket Annotation for Ministers
-  gAnnotations.append('rect')
-    .attr('x', margin.left)
-    .attr('y', yScale(0) - 14)
-    .attr('width', width - margin.left - margin.right)
-    .attr('height', 24)
-    .attr('fill', 'rgba(200, 75, 49, 0.06)')
-    .attr('stroke', 'var(--terracotta)')
-    .attr('stroke-dasharray', '3, 3')
-    .attr('rx', 4);
-
-  gAnnotations.append('text')
-    .attr('class', 'd3-annotation-text')
-    .attr('x', width / 2)
-    .attr('y', yScale(0) + 2)
-    .attr('text-anchor', 'middle')
-    .attr('fill', 'var(--terracotta)')
-    .text('49 Union Ministers / Executive Bench (Barred from Asking Questions)');
-
-  updateNodeAppearance(
-    d => d.is_minister ? 'transparent' : 'var(--slate)',
-    d => d.is_minister ? 0.9 : 0.85,
-    d => d.is_minister, // stroke only
-    () => 4.8
-  );
-}}
-
-// Step 4: Celebrities vs Workhorses (With Profile Avatars)
-function setupStep4() {{
-  document.getElementById('hud-step-title').textContent = 'Step 4: Celebrities vs. Workhorses (Photo Avatars)';
+  document.getElementById('hud-step-title').textContent = 'Step 3: Celebrity MPs vs. Question Leaders';
   setupStep2();
 
-  // Highlight celebrities with photo pattern if available, or terracotta; workhorses in ochre
+  // Key spotlight MPs with photos
+  const spotlightIds = [
+    'ajay-singh-dharmendra-deol', // Sunny Deol (4 Qs, 17% Att)
+    'nusrat-jahan-ruhi',         // Nusrat Jahan (147 Qs, 23% Att)
+    'mimi-chakraborty',           // Mimi Chakraborty (161 Qs, 21% Att)
+    'manoj-tiwari',              // Manoj Tiwari (395 Qs, 85% Att)
+    'sukanta-majumdar',          // Sukanta Majumdar (654 Qs, 73% Att)
+    'kuldeep-rai-sharma',        // Kuldeep Rai Sharma (610 Qs, 70% Att)
+    'bidyut-baran-mahato',       // Bidyut Baran Mahato (632 Qs, 90% Att)
+    'amol-ramsing-kolhe'         // Amol Kolhe (621 Qs, 61% Att)
+  ];
+
+  // If node is not spotlighted and has no image in this section, fade out
   updateNodeAppearance(
     d => {{
-      if (d.is_celeb) {{
-        return d.image_url ? `url(#pat-${{d.id}})` : 'var(--terracotta)';
+      if (spotlightIds.includes(d.id) && d.image_url) {{
+        return `url(#pat-${{d.id}})`;
       }}
-      if (d.questions >= 550) {{
-        return d.image_url ? `url(#pat-${{d.id}})` : 'var(--ochre)';
-      }}
-      if (d.is_minister) return 'transparent';
       return 'var(--gray-node)';
     }},
-    d => (d.is_celeb || d.questions >= 550) ? 1 : 0.2,
-    d => d.is_minister,
-    d => d.is_celeb ? 14 : (d.questions >= 550 ? 11 : 4.2)
+    d => spotlightIds.includes(d.id) ? 1 : 0.15,
+    () => false,
+    d => (spotlightIds.includes(d.id) && d.image_url) ? 14 : 3.8
   );
 
-  // High-visibility editorial labels for celebrities & workhorses
-  const keyCelebrities = nodes.filter(d => 
-    d.name.includes('Sunny') || d.name.includes('Shatrughan') || d.name.includes('Hema') || d.name.includes('Gambhir')
-  );
-  
-  const keyWorkhorses = nodes.filter(d => 
-    d.name.includes('Sukanta') || d.name.includes('Supriya')
-  );
+  // Render text name labels for all spotlighted photo nodes
+  const spotlightNodes = nodes.filter(d => spotlightIds.includes(d.id) && d.image_url);
 
-  [...keyCelebrities, ...keyWorkhorses].forEach(f => {{
+  spotlightNodes.forEach(f => {{
     const x = xScale(f.attendance !== null ? f.attendance : 20);
     const y = yScale(f.questions);
     const isHigh = f.questions > 300;
+    const isDeol = f.id === 'ajay-singh-dharmendra-deol';
+    const isManoj = f.id === 'manoj-tiwari';
+    const isSukanta = f.id === 'sukanta-majumdar';
+
+    const displayName = isDeol ? 'Sunny Deol' : f.name.split(' ')[0] + ' ' + (f.name.split(' ')[1] || '');
 
     gAnnotations.append('line')
       .attr('class', 'd3-annotation-line')
       .attr('x1', x).attr('y1', y)
-      .attr('x2', x + (isHigh ? 30 : -30))
-      .attr('y2', y - (isHigh ? 22 : 28));
+      .attr('x2', x + (isHigh ? 28 : -28))
+      .attr('y2', y - (isHigh ? 18 : 22));
 
     gAnnotations.append('text')
       .attr('class', 'd3-annotation-text')
-      .attr('x', x + (isHigh ? 34 : -34))
-      .attr('y', y - (isHigh ? 26 : 32))
+      .attr('x', x + (isHigh ? 32 : -32))
+      .attr('y', y - (isHigh ? 20 : 25))
       .attr('text-anchor', isHigh ? 'start' : 'end')
-      .attr('fill', f.is_celeb ? 'var(--terracotta)' : 'var(--ink)')
-      .text(f.name.split(' ')[0] + ` (${{f.questions}} Qs, ${{f.attendance || 0}}% Att)`);
+      .attr('fill', f.is_celeb ? 'var(--terracotta)' : 'var(--slate)')
+      .attr('font-weight', '700')
+      .text(`${{displayName}} (${{f.questions}} Qs, ${{f.attendance || 0}}%)`);
   }});
 }}
 
-// Step 5: State Columns (Maharashtra Anomaly)
-function setupStep5() {{
-  document.getElementById('hud-step-title').textContent = 'Step 5: Questions by Key States (Maharashtra Anomaly)';
+// Step 4: State Columns (Maharashtra Pattern)
+function setupStep4() {{
+  document.getElementById('hud-step-title').textContent = 'Step 4: Questions by Key States';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
@@ -1802,66 +1769,82 @@ function setupStep5() {{
   updateNodeAppearance(
     d => d.state === 'Maharashtra' ? 'var(--terracotta)' : 'var(--slate)',
     d => d.state === 'Maharashtra' ? 0.95 : 0.35,
-    d => false,
+    () => false,
     () => 4.8
   );
 }}
 
-// Step 6: Gender Lens
-function setupStep6() {{
-  document.getElementById('hud-step-title').textContent = 'Step 6: Gender Scrutiny (Female = Coral, Male = Slate)';
+// Step 5: Gender Lens
+function setupStep5() {{
+  document.getElementById('hud-step-title').textContent = 'Step 5: Questions by Gender (Female = Coral, Male = Slate)';
   setupStep2();
 
   updateNodeAppearance(
     d => d.gender === 'Female' ? 'var(--terracotta)' : 'var(--slate)',
     d => d.gender === 'Female' ? 1 : 0.35,
-    d => false,
+    () => false,
     d => d.gender === 'Female' ? 5.6 : 4.4
   );
 }}
 
-// Step 7: The National Wishlist (Ministry Packed Bubbles)
-function setupStep7() {{
-  document.getElementById('hud-step-title').textContent = 'Step 7: The National Wishlist (Ministry Bubble Pack)';
+// Step 6: The National Wishlist (Ministry Packed Bubbles)
+function setupStep6() {{
+  document.getElementById('hud-step-title').textContent = 'Step 6: Questions by Ministry';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
 
-  // 4 main ministry clusters + small ones
+  // 4 main ministry clusters + small ones positioned with ample label clearance
   const clusters = {{
-    'Health and Family Welfare': {{ x: width * 0.28, y: height * 0.35, color: '#DC2626', name: 'Health (7,595)' }},
-    'Agriculture and Farmers Welfare': {{ x: width * 0.72, y: height * 0.35, color: '#16A34A', name: 'Agriculture (5,122)' }},
-    'Railways': {{ x: width * 0.32, y: height * 0.70, color: '#2563EB', name: 'Railways (4,809)' }},
-    'Finance': {{ x: width * 0.68, y: height * 0.70, color: '#EAB308', name: 'Finance (4,383)' }},
-    'Other': {{ x: width * 0.50, y: height * 0.52, color: '#8C8780', name: 'Other Ministries' }}
+    'Health and Family Welfare': {{ x: width * 0.28, y: height * 0.38, color: '#DC2626', name: 'Health & Family Welfare (7,595 Qs)' }},
+    'Agriculture and Farmers Welfare': {{ x: width * 0.72, y: height * 0.38, color: '#16A34A', name: 'Agriculture (5,122 Qs)' }},
+    'Railways': {{ x: width * 0.30, y: height * 0.72, color: '#2563EB', name: 'Railways (4,809 Qs)' }},
+    'Finance': {{ x: width * 0.70, y: height * 0.72, color: '#D97706', name: 'Finance (4,383 Qs)' }},
+    'Other': {{ x: width * 0.50, y: height * 0.55, color: '#8C8780', name: 'Other Ministries' }}
   }};
 
+  // Render Cluster Labels on the top annotation layer with background pill badges so text is never hidden
   Object.values(clusters).forEach(c => {{
-    gAnnotations.append('text')
-      .attr('x', c.x)
-      .attr('y', c.y - 42)
+    const labelGroup = gAnnotations.append('g')
+      .attr('transform', `translate(${{c.x}}, ${{c.y - 48}})`);
+
+    // Pill background
+    const bgRect = labelGroup.append('rect')
+      .attr('rx', 4)
+      .attr('fill', 'rgba(250, 247, 242, 0.94)')
+      .attr('stroke', c.color)
+      .attr('stroke-width', 1.2)
+      .attr('height', 22);
+
+    const txt = labelGroup.append('text')
       .attr('text-anchor', 'middle')
+      .attr('y', 15)
       .attr('font-family', 'var(--font-serif)')
       .attr('font-size', '12px')
-      .attr('font-weight', '600')
+      .attr('font-weight', '700')
       .attr('fill', c.color)
       .text(c.name);
+
+    const txtWidth = txt.node().getComputedTextLength() + 20;
+    bgRect.attr('x', -txtWidth / 2).attr('width', txtWidth);
   }});
 
   // Pinned Space and Atomic Energy Micro Annotation at Bottom
-  gAnnotations.append('rect')
-    .attr('x', width / 2 - 140)
-    .attr('y', height - 32)
-    .attr('width', 280)
+  const spaceGroup = gAnnotations.append('g')
+    .attr('transform', `translate(${{width / 2}}, ${{height - 24}})`);
+
+  spaceGroup.append('rect')
+    .attr('x', -150)
+    .attr('y', -14)
+    .attr('width', 300)
     .attr('height', 24)
-    .attr('fill', 'rgba(27, 27, 27, 0.05)')
+    .attr('fill', 'rgba(250, 247, 242, 0.95)')
     .attr('stroke', 'var(--ink-muted)')
     .attr('rx', 4);
 
-  gAnnotations.append('text')
-    .attr('x', width / 2)
-    .attr('y', height - 16)
+  spaceGroup.append('text')
     .attr('text-anchor', 'middle')
+    .attr('y', 2)
     .attr('font-family', 'var(--font-mono)')
     .attr('font-size', '9.5px')
     .attr('fill', 'var(--ink)')
@@ -1899,12 +1882,12 @@ function updateNodeAppearance(fillFn, opacityFn, isStrokeFn, radiusFn) {{
     .attr('r', d => radiusFn ? radiusFn(d) : d.radius)
     .attr('fill', d => isStrokeFn(d) ? 'transparent' : fillFn(d))
     .attr('stroke', d => {{
-      if (currentStep === 4 && d.is_celeb) return 'var(--terracotta)';
+      if (currentStep === 3 && d.is_celeb) return 'var(--terracotta)';
       if (isStrokeFn(d)) return 'var(--ink-muted)';
       return '#FFFFFF';
     }})
     .attr('stroke-width', d => {{
-      if (currentStep === 4 && d.is_celeb) return 2.2;
+      if (currentStep === 3 && d.is_celeb) return 2.2;
       if (isStrokeFn(d)) return 1.4;
       return 0.7;
     }})
@@ -1996,7 +1979,6 @@ function initScroller() {{
       case 4: setupStep4(); break;
       case 5: setupStep5(); break;
       case 6: setupStep6(); break;
-      case 7: setupStep7(); break;
     }}
   }});
 }}
