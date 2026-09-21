@@ -122,7 +122,22 @@ def encode_img_b64(path):
 
 img_wink = encode_img_b64('/Users/aashima/Desktop/DataViz5/outcome/story/images/wink.webp')
 img_reaction = encode_img_b64('/Users/aashima/Desktop/DataViz5/outcome/story/images/reaction.jpg')
+img_protest = encode_img_b64('/Users/aashima/Desktop/DataViz5/outcome/story/images/protest_well.jpg')
 img_cash = encode_img_b64('/Users/aashima/Desktop/DataViz5/outcome/story/images/cash_for_vote.jpg')
+
+# Load MP images json for celebrity and workhorse avatars
+MP_IMAGES_PATH = '/Users/aashima/Desktop/DataViz5/data/loksabha-questions/curated/mp_images.json'
+mp_img_map = {}
+if os.path.exists(MP_IMAGES_PATH):
+    try:
+        with open(MP_IMAGES_PATH) as imf:
+            mp_img_map = json.load(imf)
+    except:
+        pass
+
+# Attach image URL if available
+for m in all_mps:
+    m['image_url'] = mp_img_map.get(m['id'])
 
 # Ministry summary counts
 ministry_stats = {}
@@ -545,63 +560,110 @@ body {{
   font-family: var(--font-sans);
 }}
 
-/* Mini Gender Diverging Chart in Step 6 */
+/* Redesigned Scrutiny Disparity Chart in Step 6 */
 .gender-diverge {{
-  margin-top: 1.2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border);
+  margin-top: 1.35rem;
+  padding: 1.1rem 1.15rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}}
+.gender-diverge-header {{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
 }}
 .gender-diverge-title {{
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--ink-muted);
-  margin-bottom: 0.75rem;
+  color: var(--slate);
 }}
-.gender-bar-row {{
+.gender-diverge-legend {{
+  display: flex;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+}}
+.legend-item {{
   display: flex;
   align-items: center;
-  font-size: 0.72rem;
-  margin-bottom: 0.45rem;
-  gap: 0.5rem;
+  gap: 0.3rem;
+}}
+.legend-dot {{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}}
+.legend-dot.f {{ background: var(--terracotta); }}
+.legend-dot.m {{ background: var(--slate); }}
+
+.gender-bar-row {{
+  display: grid;
+  grid-template-columns: 105px 1fr 50px;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+}}
+.gender-bar-row:last-child {{
+  margin-bottom: 0;
 }}
 .gender-bar-label {{
-  flex: 0 0 130px;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--ink-secondary);
 }}
-.gender-track {{
-  flex: 1;
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
+.disparity-track {{
   position: relative;
-  overflow: hidden;
+  height: 14px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
 }}
-.gender-fill-f {{
+.disparity-center-line {{
   position: absolute;
-  left: 0;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 1.5px;
+  background: var(--ink-muted);
+  opacity: 0.4;
+  z-index: 2;
+}}
+.disparity-bar {{
+  position: absolute;
   height: 100%;
+  border-radius: 7px;
+  transition: width 0.4s ease;
+}}
+.bar-right {{
+  left: 50%;
   background: var(--terracotta);
-  border-radius: 3px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }}
-.gender-fill-m {{
-  position: absolute;
-  left: 0;
-  height: 100%;
+.bar-left {{
+  right: 50%;
   background: var(--slate);
-  border-radius: 3px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }}
 .gender-gap {{
-  flex: 0 0 42px;
-  text-align: right;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
 }}
 .gap-f {{ color: var(--terracotta); }}
 .gap-m {{ color: var(--slate); }}
@@ -1119,7 +1181,8 @@ footer {{
     <!-- Photo 3 -->
     <div class="theater-card">
       <div class="theater-img-wrap">
-        <div class="theater-fallback" style="display:flex">
+        {'<img class="theater-img" src="' + img_protest + '" alt="Floor Chaos in the Well">' if img_protest else ''}
+        <div class="theater-fallback" style="{'display:none' if img_protest else 'display:flex'}">
           <span class="theater-fallback-icon">📜</span>
           <strong>Floor Chaos in the Well</strong>
           <span>Protests, placards, and shouting matches</span>
@@ -1128,7 +1191,7 @@ footer {{
       <div class="theater-caption">
         <div class="theater-tag">Floor Disruption</div>
         <div class="theater-desc">The Well Protest</div>
-        <div class="theater-sub">Frequent adjournments and papers torn on the floor.</div>
+        <div class="theater-sub">Frequent adjournments, placards, and disruptions in the well.</div>
       </div>
     </div>
 
@@ -1253,25 +1316,47 @@ footer {{
           </div>
           
           <div class="gender-diverge">
-            <div class="gender-diverge-title">Scrutiny Disparity by Ministry</div>
+            <div class="gender-diverge-header">
+              <div class="gender-diverge-title">Scrutiny Disparity by Ministry</div>
+              <div class="gender-diverge-legend">
+                <div class="legend-item"><span class="legend-dot f"></span><span>Women Lean</span></div>
+                <div class="legend-item"><span class="legend-dot m"></span><span>Men Lean</span></div>
+              </div>
+            </div>
+            
             <div class="gender-bar-row">
               <span class="gender-bar-label">Women & Child</span>
-              <div class="gender-track"><div class="gender-fill-f" style="width:75%"></div></div>
+              <div class="disparity-track">
+                <div class="disparity-center-line"></div>
+                <div class="disparity-bar bar-right" style="width: 48.4%;"></div>
+              </div>
               <span class="gender-gap gap-f">+24.2%</span>
             </div>
+            
             <div class="gender-bar-row">
               <span class="gender-bar-label">Social Justice</span>
-              <div class="gender-track"><div class="gender-fill-f" style="width:62%"></div></div>
+              <div class="disparity-track">
+                <div class="disparity-center-line"></div>
+                <div class="disparity-bar bar-right" style="width: 24.6%;"></div>
+              </div>
               <span class="gender-gap gap-f">+12.3%</span>
             </div>
+            
             <div class="gender-bar-row">
               <span class="gender-bar-label">Civil Aviation</span>
-              <div class="gender-track"><div class="gender-fill-m" style="width:70%"></div></div>
+              <div class="disparity-track">
+                <div class="disparity-center-line"></div>
+                <div class="disparity-bar bar-left" style="width: 43.8%;"></div>
+              </div>
               <span class="gender-gap gap-m">-21.9%</span>
             </div>
+            
             <div class="gender-bar-row">
               <span class="gender-bar-label">Defence</span>
-              <div class="gender-track"><div class="gender-fill-m" style="width:60%"></div></div>
+              <div class="disparity-track">
+                <div class="disparity-center-line"></div>
+                <div class="disparity-bar bar-left" style="width: 35.8%;"></div>
+              </div>
               <span class="gender-gap gap-m">-17.9%</span>
             </div>
           </div>
@@ -1416,37 +1501,66 @@ const svg = d3.select('#viz-svg');
 let width = container.clientWidth;
 let height = container.clientHeight;
 
-const margin = {{ top: 40, right: 30, bottom: 50, left: 55 }};
+const margin = {{ top: 45, right: 35, bottom: 65, left: 65 }};
 
-// Groups
+// SVG Definitions for Pattern Fills (Photos of Celebrities & Key Figures)
+const defs = svg.append('defs');
+
+// Groups (Order ensures annotations and nodes sit cleanly without clipping axes)
 const gGrid = svg.append('g').attr('class', 'grid-layer');
 const gAxes = svg.append('g').attr('class', 'axis-layer');
 const gAnnotations = svg.append('g').attr('class', 'annotation-layer');
 const gNodes = svg.append('g').attr('class', 'nodes-layer');
 
-// Scales
+// Scales with safe padded domains to prevent axis/boundary overlap
 const xScale = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
-const yScale = d3.scaleLinear().domain([0, 680]).range([height - margin.bottom, margin.top]);
+const yScale = d3.scaleLinear().domain([0, 700]).range([height - margin.bottom, margin.top]);
 
 // Initialize Node Data
 let nodes = MP_DATA.map(d => ({{
   ...d,
-  x: width / 2 + (Math.random() - 0.5) * 100,
-  y: height / 2 + (Math.random() - 0.5) * 100,
+  x: width / 2 + (Math.random() - 0.5) * 60,
+  y: height / 2 + (Math.random() - 0.5) * 60,
   vx: 0,
   vy: 0,
-  radius: d.is_minister ? 4.5 : 4.8
+  radius: d.is_celeb ? 7.5 : (d.is_minister ? 4.5 : 4.8)
 }}));
 
-// ── D3 FORCE SIMULATION ──
+// Setup Pattern Images for Celebrities & Workhorses
+nodes.forEach(d => {{
+  if (d.image_url) {{
+    const pat = defs.append('pattern')
+      .attr('id', 'pat-' + d.id)
+      .attr('width', 1)
+      .attr('height', 1)
+      .attr('patternContentUnits', 'objectBoundingBox');
+    
+    pat.append('image')
+      .attr('href', d.image_url)
+      .attr('width', 1)
+      .attr('height', 1)
+      .attr('preserveAspectRatio', 'xMidYMid slice');
+  }}
+}});
+
+// ── D3 FORCE SIMULATION (High damping & smooth settling) ──
 const simulation = d3.forceSimulation(nodes)
-  .velocityDecay(0.28)
+  .velocityDecay(0.62) // High drag prevents bouncy flying/pinball effects
+  .alphaDecay(0.035)   // Settle smoothly into place
   .on('tick', ticked);
 
 function ticked() {{
   gNodes.selectAll('.mp-node')
-    .attr('cx', d => Math.max(margin.left, Math.min(width - margin.right, d.x)))
-    .attr('cy', d => Math.max(margin.top, Math.min(height - margin.bottom, d.y)));
+    .attr('cx', d => {{
+      const r = (currentStep === 4 && d.is_celeb) ? 14 : d.radius;
+      d.x = Math.max(margin.left + r + 2, Math.min(width - margin.right - r - 2, d.x));
+      return d.x;
+    }})
+    .attr('cy', d => {{
+      const r = (currentStep === 4 && d.is_celeb) ? 14 : d.radius;
+      d.y = Math.max(margin.top + r + 2, Math.min(height - margin.bottom - r - 2, d.y));
+      return d.y;
+    }});
 }}
 
 // ── STEP RENDERERS ──
@@ -1489,12 +1603,12 @@ function setupStep1() {{
     .text('National Avg: 78.9%');
 
   simulation
-    .force('x', d3.forceX(d => xScale(d.attendance !== null ? d.attendance : 78.9)).strength(0.85))
-    .force('y', d3.forceY(height / 2).strength(0.18))
-    .force('collide', d3.forceCollide(d => d.radius + 1.2).strength(0.9))
-    .alpha(0.8).restart();
+    .force('x', d3.forceX(d => xScale(d.attendance !== null ? d.attendance : 78.9)).strength(0.55))
+    .force('y', d3.forceY(height / 2).strength(0.16))
+    .force('collide', d3.forceCollide(d => d.radius + 1.2).strength(0.75))
+    .alpha(0.45).restart();
 
-  updateNodeAppearance(() => 'var(--slate)', () => 0.85, () => false);
+  updateNodeAppearance(() => 'var(--slate)', () => 0.85, () => false, () => 4.8);
 }}
 
 // Step 2: 2D Scatter (Attendance vs Questions)
@@ -1521,20 +1635,20 @@ function setupStep2() {{
   // Axis Labels
   gAxes.append('text')
     .attr('x', width / 2)
-    .attr('y', height - 12)
+    .attr('y', height - 16)
     .attr('text-anchor', 'middle')
     .attr('font-family', 'var(--font-mono)')
-    .attr('font-size', '10px')
+    .attr('font-size', '10.5px')
     .attr('fill', 'var(--ink-secondary)')
     .text('Attendance Percentage (%) →');
 
   gAxes.append('text')
     .attr('transform', 'rotate(-90)')
     .attr('x', -height / 2)
-    .attr('y', 18)
+    .attr('y', 20)
     .attr('text-anchor', 'middle')
     .attr('font-family', 'var(--font-mono)')
-    .attr('font-size', '10px')
+    .attr('font-size', '10.5px')
     .attr('fill', 'var(--ink-secondary)')
     .text('Total Questions Asked →');
 
@@ -1553,12 +1667,12 @@ function setupStep2() {{
     .text('Median Questions: 163');
 
   simulation
-    .force('x', d3.forceX(d => xScale(d.attendance !== null ? d.attendance : 78.9)).strength(0.75))
-    .force('y', d3.forceY(d => yScale(d.questions)).strength(0.75))
-    .force('collide', d3.forceCollide(d => d.radius + 1.0).strength(0.7))
-    .alpha(0.8).restart();
+    .force('x', d3.forceX(d => xScale(d.attendance !== null ? d.attendance : 78.9)).strength(0.48))
+    .force('y', d3.forceY(d => yScale(d.questions)).strength(0.48))
+    .force('collide', d3.forceCollide(d => d.radius + 1.0).strength(0.65))
+    .alpha(0.45).restart();
 
-  updateNodeAppearance(() => 'var(--slate)', () => 0.85, () => false);
+  updateNodeAppearance(() => 'var(--slate)', () => 0.85, () => false, () => 4.8);
 }}
 
 // Step 3: The Cabinet Filter
@@ -1569,7 +1683,7 @@ function setupStep3() {{
   // Bracket Annotation for Ministers
   gAnnotations.append('rect')
     .attr('x', margin.left)
-    .attr('y', yScale(8) - 10)
+    .attr('y', yScale(0) - 14)
     .attr('width', width - margin.left - margin.right)
     .attr('height', 24)
     .attr('fill', 'rgba(200, 75, 49, 0.06)')
@@ -1580,7 +1694,7 @@ function setupStep3() {{
   gAnnotations.append('text')
     .attr('class', 'd3-annotation-text')
     .attr('x', width / 2)
-    .attr('y', yScale(8) + 5)
+    .attr('y', yScale(0) + 2)
     .attr('text-anchor', 'middle')
     .attr('fill', 'var(--terracotta)')
     .text('49 Union Ministers / Executive Bench (Barred from Asking Questions)');
@@ -1588,34 +1702,43 @@ function setupStep3() {{
   updateNodeAppearance(
     d => d.is_minister ? 'transparent' : 'var(--slate)',
     d => d.is_minister ? 0.9 : 0.85,
-    d => d.is_minister // stroke only
+    d => d.is_minister, // stroke only
+    () => 4.8
   );
 }}
 
-// Step 4: Celebrities vs Workhorses
+// Step 4: Celebrities vs Workhorses (With Profile Avatars)
 function setupStep4() {{
-  document.getElementById('hud-step-title').textContent = 'Step 4: Celebrities vs. Workhorses';
+  document.getElementById('hud-step-title').textContent = 'Step 4: Celebrities vs. Workhorses (Photo Avatars)';
   setupStep2();
 
-  // Highlight celebrities in terracotta, top workhorses in ochre
+  // Highlight celebrities with photo pattern if available, or terracotta; workhorses in ochre
   updateNodeAppearance(
     d => {{
-      if (d.is_celeb) return 'var(--terracotta)';
-      if (d.questions >= 550) return 'var(--ochre)';
+      if (d.is_celeb) {{
+        return d.image_url ? `url(#pat-${{d.id}})` : 'var(--terracotta)';
+      }}
+      if (d.questions >= 550) {{
+        return d.image_url ? `url(#pat-${{d.id}})` : 'var(--ochre)';
+      }}
       if (d.is_minister) return 'transparent';
       return 'var(--gray-node)';
     }},
-    d => (d.is_celeb || d.questions >= 550) ? 1 : 0.25,
-    d => d.is_minister
+    d => (d.is_celeb || d.questions >= 550) ? 1 : 0.2,
+    d => d.is_minister,
+    d => d.is_celeb ? 14 : (d.questions >= 550 ? 11 : 4.2)
   );
 
-  // Annotations for key figures
-  const keyFigures = nodes.filter(d => 
-    d.name.includes('Sukanta') || d.name.includes('Supriya') || 
-    d.name.includes('Sunny') || d.name.includes('Shatrughan')
+  // High-visibility editorial labels for celebrities & workhorses
+  const keyCelebrities = nodes.filter(d => 
+    d.name.includes('Sunny') || d.name.includes('Shatrughan') || d.name.includes('Hema') || d.name.includes('Gambhir')
+  );
+  
+  const keyWorkhorses = nodes.filter(d => 
+    d.name.includes('Sukanta') || d.name.includes('Supriya')
   );
 
-  keyFigures.forEach(f => {{
+  [...keyCelebrities, ...keyWorkhorses].forEach(f => {{
     const x = xScale(f.attendance !== null ? f.attendance : 20);
     const y = yScale(f.questions);
     const isHigh = f.questions > 300;
@@ -1623,15 +1746,16 @@ function setupStep4() {{
     gAnnotations.append('line')
       .attr('class', 'd3-annotation-line')
       .attr('x1', x).attr('y1', y)
-      .attr('x2', x + (isHigh ? 25 : -25))
-      .attr('y2', y - (isHigh ? 20 : 25));
+      .attr('x2', x + (isHigh ? 30 : -30))
+      .attr('y2', y - (isHigh ? 22 : 28));
 
     gAnnotations.append('text')
       .attr('class', 'd3-annotation-text')
-      .attr('x', x + (isHigh ? 28 : -28))
-      .attr('y', y - (isHigh ? 25 : 30))
+      .attr('x', x + (isHigh ? 34 : -34))
+      .attr('y', y - (isHigh ? 26 : 32))
       .attr('text-anchor', isHigh ? 'start' : 'end')
-      .text(f.name.split(' ')[0] + ` (${{f.questions}} Qs)`);
+      .attr('fill', f.is_celeb ? 'var(--terracotta)' : 'var(--ink)')
+      .text(f.name.split(' ')[0] + ` (${{f.questions}} Qs, ${{f.attendance || 0}}% Att)`);
   }});
 }}
 
@@ -1643,14 +1767,14 @@ function setupStep5() {{
   gAxes.selectAll('*').remove();
 
   const keyStates = ['Maharashtra', 'Andhra Pradesh', 'Kerala', 'Tamil Nadu', 'West Bengal', 'Uttar Pradesh', 'Other States'];
-  const stateScale = d3.scalePoint().domain(keyStates).range([margin.left + 30, width - margin.right - 30]);
+  const stateScale = d3.scalePoint().domain(keyStates).range([margin.left + 35, width - margin.right - 35]);
 
   // State Labels
   keyStates.forEach(st => {{
     const x = stateScale(st);
     gAxes.append('text')
       .attr('x', x)
-      .attr('y', height - margin.bottom + 20)
+      .attr('y', height - margin.bottom + 22)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'var(--font-mono)')
       .attr('font-size', '9.5px')
@@ -1670,15 +1794,16 @@ function setupStep5() {{
     .force('x', d3.forceX(d => {{
       const st = keyStates.includes(d.state) ? d.state : 'Other States';
       return stateScale(st);
-    }}).strength(0.85))
-    .force('y', d3.forceY(d => yScale(d.questions)).strength(0.85))
-    .force('collide', d3.forceCollide(d => d.radius + 0.8).strength(0.8))
-    .alpha(0.8).restart();
+    }}).strength(0.55))
+    .force('y', d3.forceY(d => yScale(d.questions)).strength(0.55))
+    .force('collide', d3.forceCollide(d => d.radius + 0.8).strength(0.7))
+    .alpha(0.45).restart();
 
   updateNodeAppearance(
     d => d.state === 'Maharashtra' ? 'var(--terracotta)' : 'var(--slate)',
-    d => d.state === 'Maharashtra' ? 0.95 : 0.45,
-    d => false
+    d => d.state === 'Maharashtra' ? 0.95 : 0.35,
+    d => false,
+    () => 4.8
   );
 }}
 
@@ -1690,7 +1815,8 @@ function setupStep6() {{
   updateNodeAppearance(
     d => d.gender === 'Female' ? 'var(--terracotta)' : 'var(--slate)',
     d => d.gender === 'Female' ? 1 : 0.35,
-    d => false
+    d => false,
+    d => d.gender === 'Female' ? 5.6 : 4.4
   );
 }}
 
@@ -1705,15 +1831,15 @@ function setupStep7() {{
   const clusters = {{
     'Health and Family Welfare': {{ x: width * 0.28, y: height * 0.35, color: '#DC2626', name: 'Health (7,595)' }},
     'Agriculture and Farmers Welfare': {{ x: width * 0.72, y: height * 0.35, color: '#16A34A', name: 'Agriculture (5,122)' }},
-    'Railways': {{ x: width * 0.32, y: height * 0.72, color: '#2563EB', name: 'Railways (4,809)' }},
-    'Finance': {{ x: width * 0.68, y: height * 0.72, color: '#EAB308', name: 'Finance (4,383)' }},
+    'Railways': {{ x: width * 0.32, y: height * 0.70, color: '#2563EB', name: 'Railways (4,809)' }},
+    'Finance': {{ x: width * 0.68, y: height * 0.70, color: '#EAB308', name: 'Finance (4,383)' }},
     'Other': {{ x: width * 0.50, y: height * 0.52, color: '#8C8780', name: 'Other Ministries' }}
   }};
 
   Object.values(clusters).forEach(c => {{
     gAnnotations.append('text')
       .attr('x', c.x)
-      .attr('y', c.y - 45)
+      .attr('y', c.y - 42)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'var(--font-serif)')
       .attr('font-size', '12px')
@@ -1746,14 +1872,14 @@ function setupStep7() {{
       const topM = d.top_ministries[0]?.m;
       const target = clusters[topM] || clusters['Other'];
       return target.x;
-    }}).strength(0.75))
+    }}).strength(0.55))
     .force('y', d3.forceY(d => {{
       const topM = d.top_ministries[0]?.m;
       const target = clusters[topM] || clusters['Other'];
       return target.y;
-    }}).strength(0.75))
-    .force('collide', d3.forceCollide(d => d.radius + 1.2).strength(0.85))
-    .alpha(0.8).restart();
+    }}).strength(0.55))
+    .force('collide', d3.forceCollide(d => d.radius + 1.2).strength(0.75))
+    .alpha(0.45).restart();
 
   updateNodeAppearance(
     d => {{
@@ -1762,16 +1888,26 @@ function setupStep7() {{
       return target.color;
     }},
     () => 0.85,
-    () => false
+    () => false,
+    () => 4.8
   );
 }}
 
-function updateNodeAppearance(fillFn, opacityFn, isStrokeFn) {{
+function updateNodeAppearance(fillFn, opacityFn, isStrokeFn, radiusFn) {{
   gNodes.selectAll('.mp-node')
-    .transition().duration(400)
+    .transition().duration(500).ease(d3.easeCubicOut)
+    .attr('r', d => radiusFn ? radiusFn(d) : d.radius)
     .attr('fill', d => isStrokeFn(d) ? 'transparent' : fillFn(d))
-    .attr('stroke', d => isStrokeFn(d) ? 'var(--ink-muted)' : '#FFFFFF')
-    .attr('stroke-width', d => isStrokeFn(d) ? 1.4 : 0.7)
+    .attr('stroke', d => {{
+      if (currentStep === 4 && d.is_celeb) return 'var(--terracotta)';
+      if (isStrokeFn(d)) return 'var(--ink-muted)';
+      return '#FFFFFF';
+    }})
+    .attr('stroke-width', d => {{
+      if (currentStep === 4 && d.is_celeb) return 2.2;
+      if (isStrokeFn(d)) return 1.4;
+      return 0.7;
+    }})
     .attr('opacity', opacityFn);
 }}
 
