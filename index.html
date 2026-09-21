@@ -8,7 +8,7 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,600&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 
 <!-- D3.js & Scrollama -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -23,7 +23,7 @@
   --border: #E8E3DA;
   --border-dark: #D4CECA;
   --ink: #1B1B1B;
-  --ink-secondary: #524F4A;
+  --ink-secondary: #4A4642;
   --ink-muted: #8C8780;
   
   --terracotta: #C84B31;
@@ -36,8 +36,8 @@
   --gray-node: #D4CECA;
   
   --font-serif: 'Newsreader', Georgia, serif;
-  --font-display: 'Cinzel', serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -333,73 +333,104 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.25;
-  transition: opacity 0.4s ease;
-  padding: 2rem 0;
+  opacity: 0.28;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  padding: 2.5rem 0;
 }
 .step.is-active {
   opacity: 1;
 }
 
 .step-card {
-  background: var(--bg-card-trans);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.75rem 1.85rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(224, 218, 209, 0.85);
+  border-radius: 14px;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 10px 30px rgba(45, 64, 89, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
 }
-.step-number {
+.step.is-active .step-card {
+  border-color: rgba(200, 75, 49, 0.4);
+  box-shadow: 0 16px 40px rgba(45, 64, 89, 0.09), 0 2px 8px rgba(200, 75, 49, 0.05);
+  transform: translateY(-2px);
+}
+.step.is-active .step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--terracotta), var(--ochre));
+}
+
+.step-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--terracotta);
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
-.step-number::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
+.tag-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  display: inline-block;
 }
 
 .step-title {
-  font-family: var(--font-serif);
-  font-size: 1.45rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
   color: var(--ink);
-  line-height: 1.25;
-  margin-bottom: 0.85rem;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.95rem;
 }
 
 .step-body {
-  font-size: 0.93rem;
-  line-height: 1.65;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: var(--ink-secondary);
 }
 .step-body p {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 .step-body p:last-child {
   margin-bottom: 0;
 }
+.step-body p strong {
+  color: var(--ink);
+  font-weight: 600;
+}
 
 .step-annotation {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: var(--bg);
-  border-left: 3px solid var(--terracotta);
-  border-radius: 4px;
-  font-size: 0.8rem;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  background: #F8F5EE;
+  border: 1px solid var(--border);
+  border-left: 3.5px solid var(--terracotta);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.5;
   color: var(--ink-secondary);
   font-family: var(--font-sans);
+}
+.step-annotation strong {
+  color: var(--terracotta);
+  font-weight: 700;
 }
 
 /* Redesigned Scrutiny Disparity Chart in Step 6 */
@@ -1078,7 +1109,7 @@ footer {
       <!-- Step 1 -->
       <div class="step" data-step="1">
         <div class="step-card">
-          <div class="step-number">Step 01</div>
+          <div class="step-tag"><span class="tag-bullet"></span>Chamber Attendance</div>
           <h3 class="step-title">High Attendance Across the Board</h3>
           <div class="step-body">
             <p>During the 17th Lok Sabha, the national average attendance was <strong>78.9%</strong>.</p>
@@ -1093,7 +1124,7 @@ footer {
       <!-- Step 2 -->
       <div class="step" data-step="2">
         <div class="step-card">
-          <div class="step-number">Step 02</div>
+          <div class="step-tag"><span class="tag-bullet"></span>Written Scrutiny</div>
           <h3 class="step-title">Attendance vs. Actual Questions</h3>
           <div class="step-body">
             <p>When you look at how many questions MPs actually submitted to ministries, attendance tells very little of the story.</p>
@@ -1108,7 +1139,7 @@ footer {
       <!-- Step 3 (Celebrities vs Workhorses) -->
       <div class="step" data-step="3">
         <div class="step-card">
-          <div class="step-number">Step 03</div>
+          <div class="step-tag"><span class="tag-bullet"></span>Celebrities & Workhorses</div>
           <h3 class="step-title">Celebrity MPs vs. Question Leaders</h3>
           <div class="step-body">
             <p>Famous celebrity MPs often showed very low participation once elected. For example, <strong>Sunny Deol attended 17% of sessions and asked only 4 questions in five years</strong>.</p>
@@ -1123,7 +1154,7 @@ footer {
       <!-- Step 4 (The Maharashtra Pattern) -->
       <div class="step" data-step="4">
         <div class="step-card">
-          <div class="step-number">Step 04</div>
+          <div class="step-tag"><span class="tag-bullet"></span>State Patterns</div>
           <h3 class="step-title">The Maharashtra Pattern</h3>
           <div class="step-body">
             <p>State habits vary widely. MPs from <strong>Maharashtra averaged 346 questions each</strong>, significantly higher than any other major state.</p>
@@ -1138,7 +1169,7 @@ footer {
       <!-- Step 5 (The Gender Differences) -->
       <div class="step" data-step="5">
         <div class="step-card">
-          <div class="step-number">Step 05</div>
+          <div class="step-tag"><span class="tag-bullet"></span>Gender Focus</div>
           <h3 class="step-title">Topic Focus by Gender</h3>
           <div class="step-body">
             <p>Women MPs made up 82 of 559 members. Their overall question volume was similar to men (177 vs 183 average), but their topics differed notably.</p>
@@ -1196,14 +1227,15 @@ footer {
       <!-- Step 6 (The National Wishlist) -->
       <div class="step" data-step="6">
         <div class="step-card">
-          <div class="step-number">Step 06</div>
+          <div class="step-tag"><span class="tag-bullet"></span>National Priorities</div>
           <h3 class="step-title">The National Wishlist</h3>
           <div class="step-body">
-            <p>What topics did MPs ask about most? The bulk of questions focused on basic public services: <strong>Health (7,595), Agriculture (5,122), and Railways (4,809)</strong> accounted for over 17,500 questions.</p>
-            <p>In contrast, specialized technical departments received very few questions: the <strong>Department of Space received only 1 question</strong> in five years, and Atomic Energy received 8.</p>
+            <p>What topics did MPs ask about most? Questions centered heavily on basic welfare and citizen priorities: <strong>Health & Family Welfare (7,595), Agriculture (5,122), Education (3,589), and Environment & Climate (3,535)</strong> led the docket.</p>
+            <p>Sustained scrutiny also focused on <strong>Women & Child Development (3,063), Labour & Employment (2,688), and Rural Development (2,545)</strong> across all parties.</p>
+            <p>In contrast, technical departments received almost no questions: the <strong>Department of Space received just 1 question</strong> in five years, and Atomic Energy received 8.</p>
           </div>
           <div class="step-annotation">
-            🚀 <strong>Rarely Asked:</strong> Only 9 total questions asked about Space and Atomic Energy combined.
+            🔍 <strong>Welfare Focus:</strong> Public healthcare, farming, schools, and livelihoods make up the overwhelming majority of floor questions.
           </div>
         </div>
       </div>
@@ -1397,7 +1429,7 @@ function ticked() {
 
 // Step 1: Attendance Swarm (1D)
 function setupStep1() {
-  document.getElementById('hud-step-title').textContent = 'Step 1: Attendance (0% to 100%)';
+  document.getElementById('hud-step-title').textContent = 'Chamber Overview · 17th Lok Sabha';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
@@ -1443,7 +1475,7 @@ function setupStep1() {
 
 // Step 2: 2D Scatter (Attendance vs Questions)
 function setupStep2() {
-  document.getElementById('hud-step-title').textContent = 'Step 2: Attendance vs. Questions Asked';
+  document.getElementById('hud-step-title').textContent = 'Attendance vs. Questions Asked';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
@@ -1507,7 +1539,7 @@ function setupStep2() {
 
 // Step 3: Celebrities vs Workhorses (Photos only, names clearly shown)
 function setupStep3() {
-  document.getElementById('hud-step-title').textContent = 'Step 3: Celebrity MPs vs. Question Leaders';
+  document.getElementById('hud-step-title').textContent = 'Celebrity Backbenchers vs. Legislative Workhorses';
   setupStep2();
 
   // Key spotlight MPs with photos
@@ -1567,7 +1599,7 @@ function setupStep3() {
 
 // Step 4: State Columns (Maharashtra Pattern)
 function setupStep4() {
-  document.getElementById('hud-step-title').textContent = 'Step 4: Questions by Key States';
+  document.getElementById('hud-step-title').textContent = 'Questions by State · Maharashtra Pattern';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
@@ -1615,7 +1647,7 @@ function setupStep4() {
 
 // Step 5: Gender Lens
 function setupStep5() {
-  document.getElementById('hud-step-title').textContent = 'Step 5: Questions by Gender (Female = Coral, Male = Slate)';
+  document.getElementById('hud-step-title').textContent = 'Questions by Gender · Female vs. Male Priorities';
   setupStep2();
 
   updateNodeAppearance(
@@ -1628,29 +1660,41 @@ function setupStep5() {
 
 // Step 6: The National Wishlist (Ministry Packed Bubbles)
 function setupStep6() {
-  document.getElementById('hud-step-title').textContent = 'Step 6: Questions by Ministry';
+  document.getElementById('hud-step-title').textContent = 'The National Wishlist · Questions by Sector';
   gGrid.selectAll('*').remove();
   gAnnotations.selectAll('*').remove();
   gAxes.selectAll('*').remove();
 
-  // 4 main ministry clusters + small ones positioned with ample label clearance
+  // Ministries with balanced coordinates and clear color coding
   const clusters = {
-    'Health and Family Welfare': { x: width * 0.28, y: height * 0.38, color: '#DC2626', name: 'Health & Family Welfare (7,595 Qs)' },
-    'Agriculture and Farmers Welfare': { x: width * 0.72, y: height * 0.38, color: '#16A34A', name: 'Agriculture (5,122 Qs)' },
-    'Railways': { x: width * 0.30, y: height * 0.72, color: '#2563EB', name: 'Railways (4,809 Qs)' },
-    'Finance': { x: width * 0.70, y: height * 0.72, color: '#D97706', name: 'Finance (4,383 Qs)' },
-    'Other': { x: width * 0.50, y: height * 0.55, color: '#8C8780', name: 'Other Ministries' }
+    'Health and Family Welfare': { x: width * 0.22, y: height * 0.25, color: '#DC2626', name: 'Health & Family Welfare (7,595 Qs)' },
+    'Agriculture and Farmers Welfare': { x: width * 0.50, y: height * 0.22, color: '#16A34A', name: 'Agriculture & Farmers (5,122 Qs)' },
+    'Education': { x: width * 0.78, y: height * 0.25, color: '#2563EB', name: 'Education (3,589 Qs)' },
+    'Environment, Forest and Climate Change': { x: width * 0.22, y: height * 0.56, color: '#0D9488', name: 'Environment & Climate (3,535 Qs)' },
+    'Rural Development': { x: width * 0.50, y: height * 0.54, color: '#7C3AED', name: 'Rural Development (2,545 Qs)' },
+    'Women and Child Development': { x: width * 0.78, y: height * 0.56, color: '#D946EF', name: 'Women & Child Dev (3,063 Qs)' },
+    'Labour and Employment': { x: width * 0.35, y: height * 0.80, color: '#D97706', name: 'Labour & Employment (2,688 Qs)' },
+    'Other': { x: width * 0.68, y: height * 0.80, color: '#8C8780', name: 'Other Ministries' }
   };
+
+  function getClusterTarget(d) {
+    if (d.top_ministries && d.top_ministries.length) {
+      for (let item of d.top_ministries) {
+        if (clusters[item.m]) return clusters[item.m];
+      }
+    }
+    return clusters['Other'];
+  }
 
   // Render Cluster Labels on the top annotation layer with background pill badges so text is never hidden
   Object.values(clusters).forEach(c => {
     const labelGroup = gAnnotations.append('g')
-      .attr('transform', `translate(${c.x}, ${c.y - 48})`);
+      .attr('transform', `translate(${c.x}, ${c.y - 46})`);
 
     // Pill background
     const bgRect = labelGroup.append('rect')
-      .attr('rx', 4)
-      .attr('fill', 'rgba(250, 247, 242, 0.94)')
+      .attr('rx', 5)
+      .attr('fill', 'rgba(250, 247, 242, 0.96)')
       .attr('stroke', c.color)
       .attr('stroke-width', 1.2)
       .attr('height', 22);
@@ -1659,12 +1703,12 @@ function setupStep6() {
       .attr('text-anchor', 'middle')
       .attr('y', 15)
       .attr('font-family', 'var(--font-serif)')
-      .attr('font-size', '12px')
+      .attr('font-size', '11.5px')
       .attr('font-weight', '700')
       .attr('fill', c.color)
       .text(c.name);
 
-    const txtWidth = txt.node().getComputedTextLength() + 20;
+    const txtWidth = txt.node().getComputedTextLength() + 18;
     bgRect.attr('x', -txtWidth / 2).attr('width', txtWidth);
   });
 
@@ -1690,25 +1734,13 @@ function setupStep6() {
     .text('🚀 Space (1 Q) · ⚛️ Atomic Energy (8 Qs)');
 
   simulation
-    .force('x', d3.forceX(d => {
-      const topM = d.top_ministries[0]?.m;
-      const target = clusters[topM] || clusters['Other'];
-      return target.x;
-    }).strength(0.55))
-    .force('y', d3.forceY(d => {
-      const topM = d.top_ministries[0]?.m;
-      const target = clusters[topM] || clusters['Other'];
-      return target.y;
-    }).strength(0.55))
+    .force('x', d3.forceX(d => getClusterTarget(d).x).strength(0.55))
+    .force('y', d3.forceY(d => getClusterTarget(d).y).strength(0.55))
     .force('collide', d3.forceCollide(d => d.radius + 1.2).strength(0.75))
     .alpha(0.45).restart();
 
   updateNodeAppearance(
-    d => {
-      const topM = d.top_ministries[0]?.m;
-      const target = clusters[topM] || clusters['Other'];
-      return target.color;
-    },
+    d => getClusterTarget(d).color,
     () => 0.85,
     () => false,
     () => 4.8
